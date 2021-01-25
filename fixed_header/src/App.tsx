@@ -8,8 +8,8 @@ const Styled = styled.div`
   background-color: rgba(57, 85, 236, 0.50);
   border-style: solid;
   border-color: black;
-  width: 600px;
-  height: 600px;
+  width: 560px;
+  height: 560px;
   border-width: 2px 2px 2px 2px;
   margin: 32px 32px 32px 32px;
   padding: 16px 16px 16px 16px;
