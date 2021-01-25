@@ -81,11 +81,11 @@ function getFixedColumnStyle(column: ColumnInterface) {
       case "right":
         return fixed_column_right_style;
       default:
-        return null;
+        return {};
     }
   }
 
-  return null;
+  return {};
 }
 
 
