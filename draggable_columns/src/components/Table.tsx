@@ -120,6 +120,24 @@ function ReactTable({ columns, data }: any) {
   function onDragEnd(result: DropResult, provided: ResponderProvided) {
   }
 
+  function DraggableCell(props: { provided: any, snapshot: any, children: any }) {
+    return (
+      <div
+        {...props.provided.draggableProps}
+        {...props.provided.dragHandleProps}
+        ref={props.provided.innerRef}
+        style={{
+          ...getDraggableColumnsStyle(
+            props.snapshot,
+            props.provided.draggableProps.style,
+          ),
+        }}
+      >
+        {props.children}
+      </div>
+    );
+  }
+
   return (
     <>
       <div>
@@ -146,19 +164,9 @@ function ReactTable({ columns, data }: any) {
                           {(provided, snapshot) => {
                             return (
                               <div className="th" {...column.getHeaderProps()}>
-                                <div
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  ref={provided.innerRef}
-                                  style={{
-                                    ...getDraggableColumnsStyle(
-                                      snapshot,
-                                      provided.draggableProps.style,
-                                    ),
-                                  }}
-                                >
+                                <DraggableCell provided={provided} snapshot={snapshot}>
                                   {column.render("Header")}
-                                </div>
+                                </DraggableCell>
                               </div>  // </th>
                             );
                           }}
