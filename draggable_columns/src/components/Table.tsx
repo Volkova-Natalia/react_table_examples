@@ -138,6 +138,19 @@ function ReactTable({ columns, data }: any) {
     );
   }
 
+  function DraggableRow(props: { column: any, i_column: number, children: any }) {
+    return (
+      <Draggable
+        key={props.column.id}
+        draggableId={props.column.id}
+        index={props.i_column}
+        isDragDisabled={!props.column.accessor}
+      >
+        {props.children}
+      </Draggable>
+    );
+  }
+
   return (
     <>
       <div>
@@ -155,13 +168,8 @@ function ReactTable({ columns, data }: any) {
                   {(droppableProvided, snapshot) => (
                     <div className="tr" {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
                       {headerGroup.headers.map((column: any, i_column: number) => (
-                        <Draggable
-                          key={column.id}
-                          draggableId={column.id}
-                          index={i_column}
-                          isDragDisabled={!column.accessor}
-                        >
-                          {(provided, snapshot) => {
+                        <DraggableRow column={column} i_column={i_column}>
+                          {(provided: any, snapshot: any) => {
                             return (
                               <div className="th" {...column.getHeaderProps()}>
                                 <DraggableCell provided={provided} snapshot={snapshot}>
@@ -170,7 +178,7 @@ function ReactTable({ columns, data }: any) {
                               </div>  // </th>
                             );
                           }}
-                        </Draggable>
+                        </DraggableRow>
                       ))}
                     </div>  // </tr>
                   )}
