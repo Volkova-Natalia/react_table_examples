@@ -152,6 +152,19 @@ function ReactTable({ columns, data }: any) {
   function onDragEnd(result: DropResult, provided: ResponderProvided) {
   }
 
+  function DraggableRow(props: { column: any, i_column: number, children: any }) {
+    return (
+      <Draggable
+        key={props.column.id}
+        draggableId={props.column.id}
+        index={props.i_column}
+        isDragDisabled={!props.column.accessor}
+      >
+        {props.children}
+      </Draggable>
+    );
+  }
+
   function DraggableCell(props: { provided: any, snapshot: any, column: any, children: any }) {
     if ("fixed_column" in props.column) {
       return (
@@ -180,19 +193,6 @@ function ReactTable({ columns, data }: any) {
     }
 
     return null;
-  }
-
-  function DraggableRow(props: { column: any, i_column: number, children: any }) {
-    return (
-      <Draggable
-        key={props.column.id}
-        draggableId={props.column.id}
-        index={props.i_column}
-        isDragDisabled={!props.column.accessor}
-      >
-        {props.children}
-      </Draggable>
-    );
   }
 
   return (
