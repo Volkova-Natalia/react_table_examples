@@ -166,23 +166,6 @@ function ReactTable({ columns, data }: any) {
     useExpanded,
   );
 
-  function TH(props: { className?: string, HeaderProps: any, children: any }) {
-    const className = (props.className) ? "th " + props.className : "th";
-    return (
-      <div className={className} {...props.HeaderProps}>
-        {props.children}
-      </div>  // th
-    );
-  }
-
-  function TD(props: { className?: string, CellProps: any, style: Object, children: any }) {
-    const className = (props.className) ? "td " + props.className : "td";
-    return (
-      <div className={className} {...props.CellProps} style={props.style}>
-        {props.children}
-      </div>  // td
-    );
-  }
 
   return (
     <>
@@ -195,9 +178,9 @@ function ReactTable({ columns, data }: any) {
               <div className="tr" {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column: any, i_column: number) => {
                   return (
-                    <TH HeaderProps={column.getHeaderProps()}>
+                    <div className="th" {...column.getHeaderProps()}>
                       {column.render("Header")}
-                    </TH>  // </th>
+                    </div>  // th
                   );
                 })}
               </div>  // </tr>
@@ -214,10 +197,10 @@ function ReactTable({ columns, data }: any) {
                 <div className="tr" {...row.getRowProps()}>
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
-                      <TD className={isSubRowClassName + " " + cell.column.id} CellProps={cell.getCellProps()}
-                          style={{ ...cell.getCellProps().style, ...getExpandableRowsStyle(row.depth, cell.column.id) }}>
+                      <div className={"td " + isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
+                           style={{ ...cell.getCellProps().style, ...getExpandableRowsStyle(row.depth, cell.column.id) }}>
                         {cell.render("Cell")}
-                      </TD>
+                      </div>  // td
                     );
                   })}
                 </div>  // tr
