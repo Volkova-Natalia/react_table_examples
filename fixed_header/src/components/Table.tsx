@@ -52,6 +52,10 @@ const StyledTable = styled.div`
     border: 1px solid black;
     border-spacing: 0;
   }
+
+  .table-wrapper .td div, .th div {  
+    height: 100%;
+  }
 `;
 
 

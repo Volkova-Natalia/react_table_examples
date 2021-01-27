@@ -42,6 +42,10 @@ const StyledTable = styled.div`
     border: 1px solid black;
     border-spacing: 0;
   }
+
+  .table-wrapper .td div, .th div {  
+    height: 100%;
+  }
 `;
 
 
@@ -83,8 +87,6 @@ const getDraggableColumnsStyle = ({ isDragging, isDropAnimating }: any, draggabl
 
   ...(!isDragging && { transform: "translate(0,0)" }),
   ...(isDropAnimating && { transitionDuration: "0.001s" }),
-
-  height: "100%",
 
   // styles we need to apply on draggables
 });
