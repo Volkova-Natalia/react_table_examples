@@ -57,7 +57,8 @@ const StyledTable = styled.div`
 
 export function getExpanderCell(row: any) {
   function getForDepthOne(level: number) {
-    const symbol = "⁝";
+    // const symbol = "⁝";
+    const symbol = row.canExpand ? "|" : "L";
     return (
       <span
         {...row.getToggleRowExpandedProps({
@@ -88,6 +89,13 @@ export function getExpanderCell(row: any) {
   }
 
   function getForExpanded() {
+    const s1: any = (
+      // <>&#9660;</>
+      <>&#9698;</>
+    );
+    const s2: any = (
+      <>&#9654;</>
+    );
     return (
       row.canExpand ? (
         <span
@@ -97,14 +105,18 @@ export function getExpanderCell(row: any) {
               // and paddingLeft to indicate the depth
               // of the row
               // paddingLeft: `${row.depth * 2}rem`,
-              // paddingLeft: `${row.depth * 8}px`,
-              paddingLeft: "8px",
+              paddingLeft: `${row.depth * 8}px`,
+              // paddingLeft: "8px",
+              // fontSize:"10px",
             },
           })}
         >
         {/*{row.isExpanded ? "👇" : "👉"}*/}
-          {/*  {row.isExpanded ? "👇🏻" : "👉🏻"}*/}
-          {row.isExpanded ? "↓" : "→"}
+            {row.isExpanded ? "👇🏻" : "👉🏻"}
+          {/*{row.isExpanded ? "↓" : "→"}*/}
+          {/*{row.isExpanded ? "➘" : "➙"}*/}
+          {/*{row.isExpanded ? "➘" : "➙"}*/}
+          {/*{row.isExpanded ? s1 : s2}*/}
           {/*{row.isExpanded ? "-" : "+"}*/}
       </span>
       ) : null
@@ -113,7 +125,7 @@ export function getExpanderCell(row: any) {
 
   return (
     <>
-      {getForDepthAll()}
+      {/*{getForDepthAll()}*/}
       {getForExpanded()}
     </>
   );
