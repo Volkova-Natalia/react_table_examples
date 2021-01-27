@@ -89,7 +89,6 @@ export function getExpanderCell(row: any) {
 
   function getForExpanded() {
     return (
-
       row.canExpand ? (
         <span
           {...row.getToggleRowExpandedProps({
