@@ -21,10 +21,6 @@ const StyledTable = styled.div`
     color: #404040;
     //background-color: red;
   }
-  
-  .table-wrapper .tr .expander{
-    text-align: left;
-  }
 
 /* A bit more styling to make it look better */
 
@@ -48,7 +44,7 @@ const StyledTable = styled.div`
 
   .table-wrapper .td, .th {
     padding: 4px 4px 4px 4px;
-    text-align: center;
+    text-align: left;
     border: 1px solid black;
     border-spacing: 0;
   }
@@ -125,6 +121,16 @@ export function getExpanderCell(row: any) {
 }
 
 
+function getExpandableRowsStyle(depthLevel?: number, cell_id?: string) {
+  if (cell_id && cell_id !== "expander") {
+    return depthLevel ? {
+      paddingLeft: `${depthLevel * 8}px`,
+    } : {};
+  }
+  return {};
+
+}
+
 export interface ColumnInterface {
   id: string,
   Header: any,
@@ -169,10 +175,10 @@ function ReactTable({ columns, data }: any) {
     );
   }
 
-  function TD(props: { className?: string, CellProps: any, children: any }) {
+  function TD(props: { className?: string, CellProps: any, style: Object, children: any }) {
     const className = (props.className) ? "td " + props.className : "td";
     return (
-      <div className={className} {...props.CellProps}>
+      <div className={className} {...props.CellProps} style={props.style}>
         {props.children}
       </div>  // td
     );
@@ -202,14 +208,14 @@ function ReactTable({ columns, data }: any) {
           {/* ----- Body ----- */}
           <div className="tbody" {...getTableBodyProps()}>
             {rows.map((row: any, i_row: number) => {
-              console.log("row", row);
               const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
               prepareRow(row);
               return (
                 <div className="tr" {...row.getRowProps()}>
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
-                      <TD className={isSubRowClassName + " " + cell.column.id} CellProps={cell.getCellProps()}>
+                      <TD className={isSubRowClassName + " " + cell.column.id} CellProps={cell.getCellProps()}
+                          style={{ ...cell.getCellProps().style, ...getExpandableRowsStyle(row.depth, cell.column.id) }}>
                         {cell.render("Cell")}
                       </TD>
                     );
