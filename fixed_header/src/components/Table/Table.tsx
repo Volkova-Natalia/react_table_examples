@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout } from "react-table";
+import { StyledTableFixedHeader } from "./features/FixedHeader";
 
 
 const StyledTable = styled.div`
@@ -13,20 +14,12 @@ const StyledTable = styled.div`
     display: flex;
     flex-direction: column;
   }
+  
 
+/* Features */
 
 /* Fixed header */
-
-  .fixed {
-    overflow-y: scroll;
-    flex-grow: 1;
-  }
-
-  .fixed-header .thead {
-    position: sticky;
-    //position: -webkit-sticky; - for Safary?
-    top: 0;
-  }
+  ${StyledTableFixedHeader}
 
 /* A bit more styling to make it look better */
 
