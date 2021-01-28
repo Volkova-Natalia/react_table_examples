@@ -20,7 +20,7 @@ const StyledTable = styled.div`
 /* Features */
 
 /* Detail rows */
-  ${StyledTableDetailRows}
+  .table-wrapper ${StyledTableDetailRows}
 
 
 /* A bit more styling to make it look better */
