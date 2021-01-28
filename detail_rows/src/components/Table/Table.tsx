@@ -79,7 +79,6 @@ function ReactTable({ columns, data, detail }: any) {
     headerGroups,
     rows,
     prepareRow,
-    visibleColumns,
 
     state,
   }: any = useTable(
