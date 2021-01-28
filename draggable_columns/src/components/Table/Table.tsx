@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useColumnOrder } from "react-table";
-import { DragDropContext, Droppable, Draggable, DropResult, ResponderProvided, DragUpdate } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { onTableDragStart, onTableDragUpdate, onTableDragEnd } from "./features/DraggableColumns";
+import { TableDraggableRow, TableDraggableCell } from "./features/DraggableColumns";
 
 
 const StyledTable = styled.div`
@@ -49,21 +51,6 @@ const StyledTable = styled.div`
 `;
 
 
-const getDraggableColumnsStyle = ({ isDragging, isDropAnimating }: any, draggableStyle: any) => ({
-  ...draggableStyle,
-  // some basic styles to make the th look a bit nicer
-  userSelect: "none",
-
-  // change background colour if dragging
-  background: isDragging ? "rgba(160, 160, 160, 0.40)" : null,
-
-  ...(!isDragging && { transform: "translate(0,0)" }),
-  ...(isDropAnimating && { transitionDuration: "0.001s" }),
-
-  // styles we need to apply on draggables
-});
-
-
 export interface ColumnInterface {
   id: string,
   Header: string,
@@ -102,56 +89,6 @@ function ReactTable({ columns, data }: any) {
 
   const currentColOrder: any = React.useRef();
 
-  function onDragStart() {
-    currentColOrder.current = flatHeaders.map((o: any, i_o: number) => o.id);
-  }
-
-  function onDragUpdate(dragUpdateObj: DragUpdate, b: ResponderProvided) {
-    const colOrder = [...currentColOrder.current];
-    const sIndex = dragUpdateObj.source.index;
-    const dIndex =
-      dragUpdateObj.destination && dragUpdateObj.destination.index;
-
-    if (typeof sIndex === "number" && typeof dIndex === "number") {
-      colOrder.splice(sIndex, 1);
-      colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
-      setColumnOrder(colOrder);
-    }
-  }
-
-  function onDragEnd(result: DropResult, provided: ResponderProvided) {
-  }
-
-  function DraggableRow(props: { column: any, i_column: number, children: any }) {
-    return (
-      <Draggable
-        key={props.column.id}
-        draggableId={props.column.id}
-        index={props.i_column}
-        isDragDisabled={!props.column.accessor}
-      >
-        {props.children}
-      </Draggable>
-    );
-  }
-
-  function DraggableCell(props: { provided: any, snapshot: any, children: any }) {
-    return (
-      <div
-        {...props.provided.draggableProps}
-        {...props.provided.dragHandleProps}
-        ref={props.provided.innerRef}
-        style={{
-          ...getDraggableColumnsStyle(
-            props.snapshot,
-            props.provided.draggableProps.style,
-          ),
-        }}
-      >
-        {props.children}
-      </div>
-    );
-  }
 
   return (
     <>
@@ -162,25 +99,25 @@ function ReactTable({ columns, data }: any) {
           <div className="thead">
             {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
               <DragDropContext
-                onDragStart={onDragStart}
-                onDragUpdate={onDragUpdate}
-                onDragEnd={onDragEnd}
+                onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
+                onDragUpdate={(initial, provided) => onTableDragUpdate(initial, provided, currentColOrder, setColumnOrder)}
+                onDragEnd={onTableDragEnd}
               >
                 <Droppable droppableId="droppable" direction="horizontal">
                   {(droppableProvided, snapshot) => (
                     <div className="tr" {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
                       {headerGroup.headers.map((column: any, i_column: number) => (
-                        <DraggableRow column={column} i_column={i_column}>
+                        <TableDraggableRow column={column} i_column={i_column}>
                           {(provided: any, snapshot: any) => {
                             return (
                               <div className="th" {...column.getHeaderProps()}>
-                                <DraggableCell provided={provided} snapshot={snapshot}>
+                                <TableDraggableCell provided={provided} snapshot={snapshot}>
                                   {column.render("Header")}
-                                </DraggableCell>
+                                </TableDraggableCell>
                               </div>  // </th>
                             );
                           }}
-                        </DraggableRow>
+                        </TableDraggableRow>
                       ))}
                     </div>  // </tr>
                   )}
