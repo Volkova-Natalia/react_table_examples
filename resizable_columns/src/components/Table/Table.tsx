@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useResizeColumns } from "react-table";
+import { StyledTableResizableColumns } from "./features/ResizableColumns";
+import TableColumnResizer from "./features/ResizableColumns";
 
 
 const StyledTable = styled.div`
@@ -15,33 +17,10 @@ const StyledTable = styled.div`
   }
 
 
-/* Resize columns */
- 
-  .resize-columns .table {
-    .th, .td {
-      .resizer {
-        display: inline-block;
-        width: 10px;
-        height: 100%;
-        position: absolute;
-        right: 0;
-        top: 0;
-        transform: translateX(50%);
-        z-index: 1;
-        //${"" /* prevents from scrolling while dragging on touch devices */}
-        touch-action: none;
+/* Features */
 
-        //&.isResizing {
-        //  background: red;
-        //}
-      }
-    }
-  }
-  
-  .resize-columns .td, .th {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+/* Resize columns */
+  ${StyledTableResizableColumns}
 
 /* A bit more styling to make it look better */
 
@@ -123,13 +102,7 @@ function ReactTable({ columns, data }: any) {
                   return (
                     <div className="th" {...column.getHeaderProps()}>
                       {column.render("Header")}
-                      {/*Use column.getResizerProps to hook up the events correctly*/}
-                      <div
-                        {...column.getResizerProps()}
-                        className={`resizer ${
-                          column.isResizing ? "isResizing" : ""
-                        }`}
-                      />
+                      <TableColumnResizer column={column}/>
                     </div>  // </th>
                   );
                 })}
