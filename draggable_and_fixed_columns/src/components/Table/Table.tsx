@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useColumnOrder } from "react-table";
-import { DragDropContext, Droppable, Draggable, DropResult, ResponderProvided, DragUpdate } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { onTableDragStart, onTableDragUpdate, onTableDragEnd } from "./features/DraggableColumns";
+import { TableDraggableRow, TableDraggableCell } from "./features/DraggableColumns";
+import { getTableFixedColumnStyle } from "./features/FixedColumns";
 
 
 const StyledTable = styled.div`
@@ -49,49 +52,6 @@ const StyledTable = styled.div`
 `;
 
 
-function getFixedColumnStyle(column: ColumnInterface) {
-  const fixed_column_left_style = {
-    position: "sticky",
-    left: "0",
-    zIndex: "1",
-  };
-
-  const fixed_column_right_style = {
-    position: "sticky",
-    right: "0",
-    zIndex: "1",
-  };
-
-  if ("fixed_column" in column) {
-    switch (column.fixed_column) {
-      case "left":
-        return fixed_column_left_style;
-      case "right":
-        return fixed_column_right_style;
-      default:
-        return {};
-    }
-  }
-
-  return {};
-}
-
-
-const getDraggableColumnsStyle = ({ isDragging, isDropAnimating }: any, draggableStyle: any) => ({
-  ...draggableStyle,
-  // some basic styles to make the th look a bit nicer
-  userSelect: "none",
-
-  // change background colour if dragging
-  background: isDragging ? "rgba(160, 160, 160, 0.40)" : null,
-
-  ...(!isDragging && { transform: "translate(0,0)" }),
-  ...(isDropAnimating && { transitionDuration: "0.001s" }),
-
-  // styles we need to apply on draggables
-});
-
-
 export interface ColumnInterface {
   id: string,
   Header: string,
@@ -131,71 +91,6 @@ function ReactTable({ columns, data }: any) {
 
   const currentColOrder: any = React.useRef();
 
-  function onDragStart() {
-    currentColOrder.current = flatHeaders.map((o: any, i_o: number) => o.id);
-  }
-
-  function onDragUpdate(dragUpdateObj: DragUpdate, b: ResponderProvided) {
-    const colOrder = [...currentColOrder.current];
-    const sIndex = dragUpdateObj.source.index;
-    const dIndex =
-      dragUpdateObj.destination && dragUpdateObj.destination.index;
-
-    if (typeof sIndex === "number" && typeof dIndex === "number") {
-      const dColumn: Object = flatHeaders[dIndex];
-      if (!("fixed_column" in dColumn)) {
-        colOrder.splice(sIndex, 1);
-        colOrder.splice(dIndex, 0, dragUpdateObj.draggableId);
-        setColumnOrder(colOrder);
-      }
-    }
-  }
-
-  function onDragEnd(result: DropResult, provided: ResponderProvided) {
-  }
-
-  function DraggableRow(props: { column: any, i_column: number, children: any }) {
-    return (
-      <Draggable
-        key={props.column.id}
-        draggableId={props.column.id}
-        index={props.i_column}
-        isDragDisabled={!props.column.accessor}
-      >
-        {props.children}
-      </Draggable>
-    );
-  }
-
-  function DraggableCell(props: { provided: any, snapshot: any, column: any, children: any }) {
-    if ("fixed_column" in props.column) {
-      return (
-        <div
-          ref={props.provided.innerRef}
-        >
-          {props.children}
-        </div>
-      );
-    } else {
-      return (
-        <div
-          {...props.provided.draggableProps}
-          {...props.provided.dragHandleProps}
-          ref={props.provided.innerRef}
-          style={{
-            ...getDraggableColumnsStyle(
-              props.snapshot,
-              props.provided.draggableProps.style,
-            ),
-          }}
-        >
-          {props.children}
-        </div>
-      );
-    }
-
-    return null;
-  }
 
   return (
     <>
@@ -206,26 +101,26 @@ function ReactTable({ columns, data }: any) {
           <div className="thead">
             {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
               <DragDropContext
-                onDragStart={onDragStart}
-                onDragUpdate={onDragUpdate}
-                onDragEnd={onDragEnd}
+                onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
+                onDragUpdate={(initial, provided) => onTableDragUpdate(initial, provided, currentColOrder, flatHeaders, setColumnOrder)}
+                onDragEnd={onTableDragEnd}
               >
                 <Droppable droppableId="droppable" direction="horizontal">
                   {(droppableProvided, snapshot) => (
                     <div className="tr" {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
                       {headerGroup.headers.map((column: any, i_column: number) => (
-                        <DraggableRow column={column} i_column={i_column}>
+                        <TableDraggableRow column={column} i_column={i_column}>
                           {(provided: any, snapshot: any) => {
                             return (
                               <div className="th" {...column.getHeaderProps()}
-                                   style={{ ...column.getHeaderProps().style, ...getFixedColumnStyle(column) }}>
-                                <DraggableCell provided={provided} snapshot={snapshot} column={column}>
+                                   style={{ ...column.getHeaderProps().style, ...getTableFixedColumnStyle(column) }}>
+                                <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
                                   {column.render("Header")}
-                                </DraggableCell>
+                                </TableDraggableCell>
                               </div> // </th>
                             );
                           }}
-                        </DraggableRow>
+                        </TableDraggableRow>
                       ))}
                     </div>  // </tr>
                   )}
@@ -244,7 +139,7 @@ function ReactTable({ columns, data }: any) {
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
                       <div className="td" {...cell.getCellProps()}
-                           style={{ ...cell.getCellProps().style, ...getFixedColumnStyle(cell.column) }}>
+                           style={{ ...cell.getCellProps().style, ...getTableFixedColumnStyle(cell.column) }}>
                         {cell.render("Cell")}
                       </div>  // td
                     );
