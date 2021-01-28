@@ -2,7 +2,7 @@ import React from "react";
 import { css } from "styled-components/macro";
 
 
-export const StyledExpandableRows = css`
+export const StyledTableExpandableRows = css`
   .tr .subRow {
     color: #404040;
     //background-color: red;

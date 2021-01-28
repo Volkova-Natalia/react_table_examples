@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useExpanded } from "react-table";
-import { StyledExpandableRows, getExpandableRowsStyle } from "./features/ExpandableRows";
+import { StyledTableExpandableRows, getExpandableRowsStyle } from "./features/ExpandableRows";
 
 
 const StyledTable = styled.div`
@@ -19,7 +19,7 @@ const StyledTable = styled.div`
 /* Features */
 
 /* Expandable rows */
-  .table-wrapper ${StyledExpandableRows}
+  .table-wrapper ${StyledTableExpandableRows}
 
 /* A bit more styling to make it look better */
 
