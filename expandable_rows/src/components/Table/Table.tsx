@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useExpanded } from "react-table";
-import { StyledTableExpandableRows, getExpandableRowsStyle } from "./features/ExpandableRows";
+import { StyledTableExpandableRows, getTableExpandableRowsStyle } from "./features/ExpandableRows";
 
 
 const StyledTable = styled.div`
@@ -121,7 +121,7 @@ function ReactTable({ columns, data }: any) {
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
                       <div className={"td " + isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
-                           style={{ ...cell.getCellProps().style, ...getExpandableRowsStyle(row.depth, cell.column.id) }}>
+                           style={{ ...cell.getCellProps().style, ...getTableExpandableRowsStyle(row.depth, cell.column.id) }}>
                         {cell.render("Cell")}
                       </div>  // td
                     );

@@ -2,6 +2,8 @@ import React from "react";
 import { css } from "styled-components/macro";
 
 
+// --------------------------------------------------
+
 export const StyledTableFixedHeader = css`
   .fixed {
     overflow-y: scroll;
@@ -14,3 +16,5 @@ export const StyledTableFixedHeader = css`
     top: 0;
   }
 `;
+
+// --------------------------------------------------

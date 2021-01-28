@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useResizeColumns } from "react-table";
 import { StyledTableResizableColumns } from "./features/ResizableColumns";
-import TableColumnResizer from "./features/ResizableColumns";
+import { TableColumnResizer } from "./features/ResizableColumns";
 
 
 const StyledTable = styled.div`

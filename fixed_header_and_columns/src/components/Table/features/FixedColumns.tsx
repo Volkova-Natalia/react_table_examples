@@ -3,6 +3,8 @@ import { css } from "styled-components/macro";
 import { ColumnInterface } from "../Table";
 
 
+// --------------------------------------------------
+
 export const StyledTableFixedColumns = css`
   .fixed .tbody {
     position: relative;
@@ -10,8 +12,12 @@ export const StyledTableFixedColumns = css`
   }
 `;
 
+// --------------------------------------------------
 
-export function getFixedColumnStyle(column: ColumnInterface) {
+
+// --------------------------------------------------
+
+export function getTableFixedColumnStyle(column: ColumnInterface) {
   const fixed_column_left_style = {
     position: "sticky",
     left: "0",
@@ -37,3 +43,5 @@ export function getFixedColumnStyle(column: ColumnInterface) {
 
   return {};
 }
+
+// --------------------------------------------------

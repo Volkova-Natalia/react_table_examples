@@ -65,33 +65,33 @@ export function TableDraggableRow(props: { column: any, i_column: number, childr
 }
 
 export function TableDraggableCell(props: { provided: any, snapshot: any, column: any, children: any }) {
-    if ("fixed_column" in props.column) {
-      return (
-        <div
-          ref={props.provided.innerRef}
-        >
-          {props.children}
-        </div>
-      );
-    } else {
-      return (
-        <div
-          {...props.provided.draggableProps}
-          {...props.provided.dragHandleProps}
-          ref={props.provided.innerRef}
-          style={{
-            ...getTableDraggableColumnsStyle(
-              props.snapshot,
-              props.provided.draggableProps.style,
-            ),
-          }}
-        >
-          {props.children}
-        </div>
-      );
-    }
-
-    return null;
+  if ("fixed_column" in props.column) {
+    return (
+      <div
+        ref={props.provided.innerRef}
+      >
+        {props.children}
+      </div>
+    );
+  } else {
+    return (
+      <div
+        {...props.provided.draggableProps}
+        {...props.provided.dragHandleProps}
+        ref={props.provided.innerRef}
+        style={{
+          ...getTableDraggableColumnsStyle(
+            props.snapshot,
+            props.provided.draggableProps.style,
+          ),
+        }}
+      >
+        {props.children}
+      </div>
+    );
   }
+
+  return null;
+}
 
 // --------------------------------------------------

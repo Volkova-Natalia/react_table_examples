@@ -2,6 +2,8 @@ import React from "react";
 import { css } from "styled-components/macro";
 
 
+// --------------------------------------------------
+
 export const StyledTableExpandableRows = css`
   .tr .subRow {
     color: #404040;
@@ -9,8 +11,12 @@ export const StyledTableExpandableRows = css`
   }
 `;
 
+// --------------------------------------------------
 
-export function getExpandableRowsStyle(depthLevel?: number, cell_id?: string) {
+
+// --------------------------------------------------
+
+export function getTableExpandableRowsStyle(depthLevel?: number, cell_id?: string) {
   if (cell_id && cell_id !== "expander") {
     return depthLevel ? {
       paddingLeft: `${depthLevel * 8}px`,
@@ -20,8 +26,12 @@ export function getExpandableRowsStyle(depthLevel?: number, cell_id?: string) {
 
 }
 
+// --------------------------------------------------
 
-export function getExpanderCell(row: any) {
+
+// --------------------------------------------------
+
+export function getTableExpanderCell(row: any) {
   function getForDepthOne(level: number) {
     // const symbol = "⁝";
     const symbol = row.canExpand ? "|" : "L";
@@ -96,3 +106,5 @@ export function getExpanderCell(row: any) {
     </>
   );
 }
+
+// --------------------------------------------------

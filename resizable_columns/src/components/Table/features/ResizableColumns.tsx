@@ -3,6 +3,8 @@ import styled from "styled-components/macro";
 import { css } from "styled-components/macro";
 
 
+// --------------------------------------------------
+
 export const StyledTableResizableColumns = css`
   .resize-columns .table {
     .th, .td {
@@ -31,8 +33,12 @@ export const StyledTableResizableColumns = css`
   }
 `;
 
+// --------------------------------------------------
 
-export default function TableColumnResizer(props: { column: any }) {
+
+// --------------------------------------------------
+
+export function TableColumnResizer(props: { column: any }) {
   return (
     // Use column.getResizerProps to hook up the events correctly
     <div
@@ -43,3 +49,5 @@ export default function TableColumnResizer(props: { column: any }) {
     />
   );
 }
+
+// --------------------------------------------------

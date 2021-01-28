@@ -3,6 +3,7 @@ import { Draggable, DragUpdate, DropResult, ResponderProvided } from "react-beau
 
 
 // --------------------------------------------------
+
 const getTableDraggableColumnsStyle = ({ isDragging, isDropAnimating }: any, draggableStyle: any) => ({
   ...draggableStyle,
   // some basic styles to make the th look a bit nicer
@@ -16,10 +17,12 @@ const getTableDraggableColumnsStyle = ({ isDragging, isDropAnimating }: any, dra
 
   // styles we need to apply on draggables
 });
+
 // --------------------------------------------------
 
 
 // --------------------------------------------------
+
 export function onTableDragStart(currentColOrder: any, flatHeaders: any) {
   currentColOrder.current = flatHeaders.map((o: any, i_o: number) => o.id);
 }
@@ -39,10 +42,12 @@ export function onTableDragUpdate(dragUpdateObj: DragUpdate, b: ResponderProvide
 
 export function onTableDragEnd(result: DropResult, provided: ResponderProvided) {
 }
+
 // --------------------------------------------------
 
 
 // --------------------------------------------------
+
 export function TableDraggableRow(props: { column: any, i_column: number, children: any }) {
   return (
     <Draggable
@@ -73,4 +78,5 @@ export function TableDraggableCell(props: { provided: any, snapshot: any, childr
     </div>
   );
 }
+
 // --------------------------------------------------

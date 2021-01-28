@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout } from "react-table";
-import { getFixedColumnStyle } from "./features/FixedColumns";
+import { getTableFixedColumnStyle } from "./features/FixedColumns";
 
 
 const StyledTable = styled.div`
@@ -95,7 +95,7 @@ function ReactTable({ columns, data }: any) {
                 {headerGroup.headers.map((column: any, i_column: number) => {
                   return (
                     <div className="th" {...column.getHeaderProps()}
-                         style={{ ...column.getHeaderProps().style, ...getFixedColumnStyle(column) }}>
+                         style={{ ...column.getHeaderProps().style, ...getTableFixedColumnStyle(column) }}>
                       {column.render("Header")}
                     </div>  // </th>
                   );
@@ -114,7 +114,7 @@ function ReactTable({ columns, data }: any) {
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
                       <div className="td" {...cell.getCellProps()}
-                           style={{ ...cell.getCellProps().style, ...getFixedColumnStyle(cell.column) }}>
+                           style={{ ...cell.getCellProps().style, ...getTableFixedColumnStyle(cell.column) }}>
                         {cell.render("Cell")}
                       </div>  // td
                     );

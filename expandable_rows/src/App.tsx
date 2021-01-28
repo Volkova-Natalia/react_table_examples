@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import Table from "./components/Table/Table";
 import { ColumnInterface } from "./components/Table/Table";
-import { getExpanderCell } from "./components/Table/features/ExpandableRows";
+import { getTableExpanderCell } from "./components/Table/features/ExpandableRows";
 
 
 const Styled = styled.div`
@@ -35,7 +35,7 @@ function App() {
       {
         id: "expander",
         Header: "",
-        Cell: ({ row }: any) => getExpanderCell(row),
+        Cell: ({ row }: any) => getTableExpanderCell(row),
       },
       {
         id: "first_name",
