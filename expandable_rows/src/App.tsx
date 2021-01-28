@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
-import Table from "./components/Table";
-import { ColumnInterface } from "./components/Table";
-import { getExpanderCell } from "./components/Table";
+import Table from "./components/Table/Table";
+import { ColumnInterface } from "./components/Table/Table";
+import { getExpanderCell } from "./components/Table/Table";
 
 
 const Styled = styled.div`
