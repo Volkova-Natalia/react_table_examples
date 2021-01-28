@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout } from "react-table";
+import { StyledTableFixedHeader } from "./features/FixedHeader";
+import { StyledTableFixedColumns, getFixedColumnStyle } from "./features/FixedColumns";
 
 
 const StyledTable = styled.div`
@@ -15,24 +17,13 @@ const StyledTable = styled.div`
   }
 
 
+/* Features */
+
 /* Fixed header */
-
-  .fixed {
-    overflow-y: scroll;
-    flex-grow: 1;
-  }
-
-  .fixed-header .thead {
-    position: sticky;
-    //position: -webkit-sticky; - for Safary?
-    top: 0;
-    z-index: 1;
-  }
+  ${StyledTableFixedHeader}
   
-  .fixed .tbody {
-    position: relative;
-    z-index: 0;
-  }
+/* Fixed columns */
+  ${StyledTableFixedColumns}
 
 /* A bit more styling to make it look better */
 
@@ -63,34 +54,6 @@ const StyledTable = styled.div`
     height: 100%;
   }
 `;
-
-
-function getFixedColumnStyle(column: ColumnInterface) {
-  const fixed_column_left_style = {
-    position: "sticky",
-    left: "0",
-    zIndex: "1",
-  };
-
-  const fixed_column_right_style = {
-    position: "sticky",
-    right: "0",
-    zIndex: "1",
-  };
-
-  if ("fixed_column" in column) {
-    switch (column.fixed_column) {
-      case "left":
-        return fixed_column_left_style;
-      case "right":
-        return fixed_column_right_style;
-      default:
-        return {};
-    }
-  }
-
-  return {};
-}
 
 
 export interface ColumnInterface {
