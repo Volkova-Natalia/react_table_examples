@@ -4,6 +4,8 @@ import { useTable, useBlockLayout, useExpanded } from "react-table";
 import { StyledTableExpandableRows, getTableExpandableRowsStyle } from "./features/ExpandableRows";
 import { StyledTableDetailRows } from "./features/DetailRows";
 import { TableDetail } from "./features/DetailRows";
+import { getIAddedDeletedExpanded, isRequiredAddExpanded, isRequiredDeleteExpanded } from "./features/ExpandableRows";
+import { getIAddedDeletedDetail, isRequiredAddDetail, isRequiredDeleteDetail } from "./features/DetailRows";
 import { isVisibleRow } from "./features/ExpandableRows";
 
 
@@ -95,10 +97,45 @@ function ReactTable({ columns, data, detail }: any) {
     useExpanded,
   );
 
-  const [isExpandDetailRows, setIsExpandDetailRows] = useState({
-    is_detail: [] = new Array<any>(),
-    is_expand: [] = new Array<any>(),
+
+  // For expandable and detail rows (begin)
+
+  const [expandedDetailRowsId, setExpandedDetailRowsId] = useState({
+    expanded: [] = new Array<any>(),
+    detail: [] = new Array<any>(),
   });
+
+  function setStateExpandedDetailRowsId(row: any) {
+    const [i_added_expanded, i_deleted_expanded] = getIAddedDeletedExpanded(row, expandedDetailRowsId.expanded);
+    const [i_added_detail, i_deleted_detail] = getIAddedDeletedDetail(row, expandedDetailRowsId.detail);
+
+    if (
+      (isRequiredAddExpanded(i_added_expanded)) ||
+      (isRequiredDeleteExpanded(i_deleted_expanded)) ||
+      (isRequiredAddDetail(i_added_detail)) ||
+      (isRequiredDeleteDetail(i_deleted_detail))
+    ) {
+      setExpandedDetailRowsId((prev) => {
+        let curr = Object.assign({}, prev);
+
+        if (isRequiredAddExpanded(i_added_expanded)) {
+          curr.expanded.push(row.id);
+        }
+        if (isRequiredAddDetail(i_added_detail)) {
+          curr.detail.push(row.id);
+        }
+        if (isRequiredDeleteExpanded(i_deleted_expanded)) {
+          curr.expanded.splice(Number(i_deleted_expanded), 1);
+        }
+        if (isRequiredDeleteDetail(i_deleted_detail)) {
+          curr.detail.splice(Number(i_deleted_detail), 1);
+        }
+        return curr;
+      });
+    }
+  }
+
+  // For expandable and detail rows (end)
 
   return (
     <>
@@ -126,47 +163,7 @@ function ReactTable({ columns, data, detail }: any) {
             {rows.map((row: any, i_row: number) => {
               prepareRow(row);
               const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
-
-              // if (row.depth === 0) {
-              {
-                let i_added_expand: number | null = null;
-                let i_added_detail: number | null = null;
-                let i_deleted_expand: number | null = null;
-                let i_deleted_detail: number | null = null;
-                if (row.is_expand) {
-                  i_added_expand = isExpandDetailRows.is_expand.indexOf(row.id);
-                } else {
-                  i_deleted_expand = isExpandDetailRows.is_expand.indexOf(row.id);
-                }
-                if (row.is_detail) {
-                  i_added_detail = isExpandDetailRows.is_detail.indexOf(row.id);
-                } else {
-                  i_deleted_detail = isExpandDetailRows.is_detail.indexOf(row.id);
-                }
-                if (((i_added_expand !== null) && (i_added_expand < 0)) ||
-                  ((i_added_detail !== null) && (i_added_detail < 0)) ||
-                  ((i_deleted_expand !== null) && (i_deleted_expand >= 0)) ||
-                  ((i_deleted_detail !== null) && (i_deleted_detail >= 0))) {
-                  setIsExpandDetailRows((prev) => {
-                    let curr = Object.assign({}, prev);
-
-                    if ((i_added_expand !== null) && (i_added_expand < 0)) {
-                      curr.is_expand.push(row.id);
-                    }
-                    if ((i_added_detail !== null) && (i_added_detail < 0)) {
-                      curr.is_detail.push(row.id);
-                    }
-                    if ((i_deleted_expand !== null) && (i_deleted_expand >= 0)) {
-                      curr.is_expand.splice(i_deleted_expand, 1);
-                    }
-                    if ((i_deleted_detail !== null) && (i_deleted_detail >= 0)) {
-                      curr.is_detail.splice(i_deleted_detail, 1);
-                    }
-                    return curr;
-                  });
-                }
-              }
-
+              setStateExpandedDetailRowsId(row);
               return (
                 isVisibleRow(row) ? (
                   <div>

@@ -19,6 +19,25 @@ export const StyledTableDetailRows = css`
 
 // --------------------------------------------------
 
+export function getIAddedDeletedDetail(row: any, detail_rows_id: Array<any>) {
+  let i_added_detail: number | null = null;
+  let i_deleted_detail: number | null = null;
+  if (row.is_detail) {
+    i_added_detail = detail_rows_id.indexOf(row.id);
+  } else {
+    i_deleted_detail = detail_rows_id.indexOf(row.id);
+  }
+  return [i_added_detail, i_deleted_detail];
+}
+
+export const isRequiredAddDetail = ((i_added_detail: number | null) => ((i_added_detail !== null) && (i_added_detail < 0)));
+export const isRequiredDeleteDetail = ((i_deleted_detail: number | null) => ((i_deleted_detail !== null) && (i_deleted_detail >= 0)));
+
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+
 export function getTableDetailerCell(row: any) {
   return (
     <>
@@ -34,7 +53,7 @@ export function getTableDetailerCell(row: any) {
             row.subRows.map((subRow: any, i_subRow: number) => {
               subRow.is_parent_detail = row.is_detail;
             });
-            row.toggleRowExpanded(row.is_detail | row.is_expand);
+            row.toggleRowExpanded(row.is_detail | row.is_expanded);
           },
         })}
       >

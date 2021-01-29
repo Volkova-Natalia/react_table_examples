@@ -31,7 +31,21 @@ export function getTableExpandableRowsStyle(depthLevel?: number, cell_id?: strin
 
 // --------------------------------------------------
 
-export const isVisibleRow = ((row: any) => ((row.depth === 0) || (row.is_parent_expand)));
+export function getIAddedDeletedExpanded(row: any, expanded_rows_id: Array<any>) {
+  let i_added_expanded: number | null = null;
+  let i_deleted_expanded: number | null = null;
+  if (row.is_expanded) {
+    i_added_expanded = expanded_rows_id.indexOf(row.id);
+  } else {
+    i_deleted_expanded = expanded_rows_id.indexOf(row.id);
+  }
+  return [i_added_expanded, i_deleted_expanded];
+}
+
+export const isRequiredAddExpanded = ((i_added_expanded: number | null) => ((i_added_expanded !== null) && (i_added_expanded < 0)));
+export const isRequiredDeleteExpanded = ((i_deleted_expanded: number | null) => ((i_deleted_expanded !== null) && (i_deleted_expanded >= 0)));
+
+export const isVisibleRow = ((row: any) => ((row.depth === 0) || (row.is_parent_expanded)));
 
 // --------------------------------------------------
 
@@ -71,13 +85,13 @@ export function getTableExpanderCell(row: any) {
     );
   }
 
-  function setSubRows_is_parent_expand(curr_row: any) {
+  function setSubRows_is_parent_expanded(curr_row: any) {
     if (curr_row.subRows.length == 0) {
       return;
     }
     curr_row.subRows.map((subRow: any, i_subRow: number) => {
-      subRow.is_parent_expand = curr_row.is_parent_expand;
-      setSubRows_is_parent_expand(subRow);
+      subRow.is_parent_expanded = curr_row.is_parent_expanded;
+      setSubRows_is_parent_expanded(subRow);
     });
   }
 
@@ -104,18 +118,18 @@ export function getTableExpanderCell(row: any) {
             },
 
             onClick: () => {
-              row.is_expand = row.is_expand ? false : true;
+              row.is_expanded = row.is_expanded ? false : true;
               row.subRows.map((subRow: any, i_subRow: number) => {
-                subRow.is_parent_expand = row.is_expand;
-                setSubRows_is_parent_expand(subRow);
+                subRow.is_parent_expanded = row.is_expanded;
+                setSubRows_is_parent_expanded(subRow);
               });
-              row.toggleRowExpanded(row.is_detail | row.is_expand);
+              row.toggleRowExpanded(row.is_detail | row.is_expanded);
             },
           })}
         >
         {/*{row.isExpanded ? "👇" : "👉"}*/}
           {/*  {row.isExpanded ? "👇🏻" : "👉🏻"}*/}
-          {row.is_expand ? "👇🏻" : "👉🏻"}
+          {row.is_expanded ? "👇🏻" : "👉🏻"}
           {/*{row.isExpanded ? "↓" : "→"}*/}
           {/*{row.isExpanded ? "➘" : "➙"}*/}
           {/*{row.isExpanded ? "➘" : "➙"}*/}
