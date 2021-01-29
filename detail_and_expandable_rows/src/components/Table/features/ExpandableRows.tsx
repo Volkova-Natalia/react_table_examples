@@ -31,6 +31,13 @@ export function getTableExpandableRowsStyle(depthLevel?: number, cell_id?: strin
 
 // --------------------------------------------------
 
+export const isVisibleRow = ((row: any) => ((row.depth === 0) || (row.is_parent_expand)));
+
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+
 export function getTableExpanderCell(row: any) {
   function getForDepthOne(level: number) {
     // const symbol = "⁝";

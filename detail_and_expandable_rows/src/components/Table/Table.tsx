@@ -4,6 +4,7 @@ import { useTable, useBlockLayout, useExpanded } from "react-table";
 import { StyledTableExpandableRows, getTableExpandableRowsStyle } from "./features/ExpandableRows";
 import { StyledTableDetailRows } from "./features/DetailRows";
 import { TableDetail } from "./features/DetailRows";
+import { isVisibleRow } from "./features/ExpandableRows";
 
 
 const StyledTable = styled.div`
@@ -142,7 +143,6 @@ function ReactTable({ columns, data, detail }: any) {
                 } else {
                   i_deleted_detail = isExpandDetailRows.is_detail.indexOf(row.id);
                 }
-                console.log(i_added_expand, i_deleted_expand, i_added_detail, i_deleted_detail);
                 if (((i_added_expand !== null) && (i_added_expand < 0)) ||
                   ((i_added_detail !== null) && (i_added_detail < 0)) ||
                   ((i_deleted_expand !== null) && (i_deleted_expand >= 0)) ||
@@ -168,7 +168,7 @@ function ReactTable({ columns, data, detail }: any) {
               }
 
               return (
-                ((row.depth === 0) || (row.is_parent_expand)) ? (
+                isVisibleRow(row) ? (
                   <div>
                     <div className="tr" {...row.getRowProps()}>
                       {row.cells.map((cell: any, i_cell: number) => {
