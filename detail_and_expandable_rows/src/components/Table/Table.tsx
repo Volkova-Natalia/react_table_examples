@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useExpanded } from "react-table";
 import { StyledTableExpandableRows, getTableExpandableRowsStyle } from "./features/ExpandableRows";
@@ -94,6 +94,10 @@ function ReactTable({ columns, data, detail }: any) {
     useExpanded,
   );
 
+  const [isExpandDetailRows, setIsExpandDetailRows] = useState({
+    is_detail: [] = new Array<any>(),
+    is_expand: [] = new Array<any>(),
+  });
 
   return (
     <>
@@ -119,23 +123,67 @@ function ReactTable({ columns, data, detail }: any) {
           {/* ----- Body ----- */}
           <div className="tbody" {...getTableBodyProps()}>
             {rows.map((row: any, i_row: number) => {
-              const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
               prepareRow(row);
+              const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
+
+              // if (row.depth === 0) {
+              {
+                let i_added_expand: number | null = null;
+                let i_added_detail: number | null = null;
+                let i_deleted_expand: number | null = null;
+                let i_deleted_detail: number | null = null;
+                if (row.is_expand) {
+                  i_added_expand = isExpandDetailRows.is_expand.indexOf(row.id);
+                } else {
+                  i_deleted_expand = isExpandDetailRows.is_expand.indexOf(row.id);
+                }
+                if (row.is_detail) {
+                  i_added_detail = isExpandDetailRows.is_detail.indexOf(row.id);
+                } else {
+                  i_deleted_detail = isExpandDetailRows.is_detail.indexOf(row.id);
+                }
+                console.log(i_added_expand, i_deleted_expand, i_added_detail, i_deleted_detail);
+                if (((i_added_expand !== null) && (i_added_expand < 0)) ||
+                  ((i_added_detail !== null) && (i_added_detail < 0)) ||
+                  ((i_deleted_expand !== null) && (i_deleted_expand >= 0)) ||
+                  ((i_deleted_detail !== null) && (i_deleted_detail >= 0))) {
+                  setIsExpandDetailRows((prev) => {
+                    let curr = Object.assign({}, prev);
+
+                    if ((i_added_expand !== null) && (i_added_expand < 0)) {
+                      curr.is_expand.push(row.id);
+                    }
+                    if ((i_added_detail !== null) && (i_added_detail < 0)) {
+                      curr.is_detail.push(row.id);
+                    }
+                    if ((i_deleted_expand !== null) && (i_deleted_expand >= 0)) {
+                      curr.is_expand.splice(i_deleted_expand, 1);
+                    }
+                    if ((i_deleted_detail !== null) && (i_deleted_detail >= 0)) {
+                      curr.is_detail.splice(i_deleted_detail, 1);
+                    }
+                    return curr;
+                  });
+                }
+              }
+
               return (
-                <div>
-                  <div className="tr" {...row.getRowProps()}>
-                    {row.cells.map((cell: any, i_cell: number) => {
-                      return (
-                        <div className={"td " + isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
-                             style={{ ...cell.getCellProps().style, ...getTableExpandableRowsStyle(row.depth, cell.column.id) }}>
-                          {cell.render("Cell")}
-                        </div>  // td
-                      );
-                    })}
+                ((row.depth === 0) || (row.is_parent_expand)) ? (
+                  <div>
+                    <div className="tr" {...row.getRowProps()}>
+                      {row.cells.map((cell: any, i_cell: number) => {
+                        return (
+                          <div className={"td " + isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
+                               style={{ ...cell.getCellProps().style, ...getTableExpandableRowsStyle(row.depth, cell.column.id) }}>
+                            {cell.render("Cell")}
+                          </div>  // td
+                        );
+                      })}
+                    </div>
+                    {/*tr*/}
+                    <TableDetail row={row} detail={detail}/>
                   </div>
-                  {/*tr*/}
-                  <TableDetail row={row} detail={detail}/>
-                </div>
+                ) : null
               );
             })}
           </div>

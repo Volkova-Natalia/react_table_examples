@@ -11,7 +11,7 @@ const Styled = styled.div`
   border-style: solid;
   border-color: black;
   width: 560px;
-  height: 560px;
+  height: 1560px;
   border-width: 2px 2px 2px 2px;
   margin: 32px 32px 32px 32px;
   padding: 16px 16px 16px 16px;
@@ -27,10 +27,10 @@ const StyledDetail = styled.div`
   padding: 16px 16px 16px 16px;
 `;
 
-function Detail() {
+function Detail(row: any) {
   return (
     <StyledDetail>
-      Detail
+      Detail {row.id} {row.original.first_name} {row.original.last_name}
     </StyledDetail>
   );
 }

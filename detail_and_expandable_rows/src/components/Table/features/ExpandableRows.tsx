@@ -64,6 +64,16 @@ export function getTableExpanderCell(row: any) {
     );
   }
 
+  function setSubRows_is_parent_expand(curr_row: any) {
+    if (curr_row.subRows.length == 0) {
+      return;
+    }
+    curr_row.subRows.map((subRow: any, i_subRow: number) => {
+      subRow.is_parent_expand = curr_row.is_parent_expand;
+      setSubRows_is_parent_expand(subRow);
+    });
+  }
+
   function getForExpanded() {
     const s1: any = (
       // <>&#9660;</>
@@ -85,10 +95,20 @@ export function getTableExpanderCell(row: any) {
               // paddingLeft: "8px",
               // fontSize:"10px",
             },
+
+            onClick: () => {
+              row.is_expand = row.is_expand ? false : true;
+              row.subRows.map((subRow: any, i_subRow: number) => {
+                subRow.is_parent_expand = row.is_expand;
+                setSubRows_is_parent_expand(subRow);
+              });
+              row.toggleRowExpanded(row.is_detail | row.is_expand);
+            },
           })}
         >
         {/*{row.isExpanded ? "👇" : "👉"}*/}
-          {row.isExpanded ? "👇🏻" : "👉🏻"}
+          {/*  {row.isExpanded ? "👇🏻" : "👉🏻"}*/}
+          {row.is_expand ? "👇🏻" : "👉🏻"}
           {/*{row.isExpanded ? "↓" : "→"}*/}
           {/*{row.isExpanded ? "➘" : "➙"}*/}
           {/*{row.isExpanded ? "➘" : "➙"}*/}

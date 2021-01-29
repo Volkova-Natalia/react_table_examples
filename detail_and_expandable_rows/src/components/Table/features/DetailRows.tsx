@@ -25,9 +25,22 @@ export function getTableDetailerCell(row: any) {
       {/*Use Cell to render an expander for each row.*/}
       {/*We can use the getToggleRowExpandedProps prop-getter*/}
       {/*to build the expander.*/}
-      <span {...row.getToggleRowExpandedProps()}>
+      <span
+        {...row.getToggleRowExpandedProps({
+          style: {},
+
+          onClick: () => {
+            row.is_detail = row.is_detail ? false : true;
+            row.subRows.map((subRow: any, i_subRow: number) => {
+              subRow.is_parent_detail = row.is_detail;
+            });
+            row.toggleRowExpanded(row.is_detail | row.is_expand);
+          },
+        })}
+      >
         {/*{row.isExpanded ? "👇🏻" : "👉🏻"}*/}
-        {row.isExpanded ? "-" : "+"}
+        {/*{row.isExpanded ? "-" : "+"}*/}
+        {row.is_detail ? "-" : "+"}
       </span>
     </>
   );
@@ -40,7 +53,7 @@ export function getTableDetailerCell(row: any) {
 
 export function TableDetail(props: { row: any, detail: any }) {
   return (
-    props.row.isExpanded ? (
+    props.row.is_detail ? (
       <div className="tr" {...props.row.getRowProps()}>
         {/*
             Inside it, call our renderRowSubComponent function. In reality,
