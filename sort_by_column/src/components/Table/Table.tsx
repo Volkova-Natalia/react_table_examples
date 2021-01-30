@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useSortBy } from "react-table";
 import { TableColumnSorter } from "./features/SortByColumn";
+import { sortHeaderPropGetter } from "./features/SortByColumn";
 
 
 const StyledTable = styled.div`
@@ -95,17 +96,11 @@ function ReactTable({ columns, data }: any) {
               <div className="tr" {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column: any, i_column: number) => {
                   return (
-                    column.is_sortable ? (
-                      <div className="th" {...column.getHeaderProps(column.getSortByToggleProps())}>
-                        {column.render("Header")}
-                        {/* Add a sort direction indicator */}
-                        <TableColumnSorter column={column}/>
-                      </div>  // </th>
-                    ) : (
-                      <div className="th" {...column.getHeaderProps()}>
-                        {column.render("Header")}
-                      </div>  // </th>
-                    )
+                    <div className="th" {...column.getHeaderProps(sortHeaderPropGetter(column))}>
+                      {column.render("Header")}
+                      {/* Add a sort direction indicator */}
+                      <TableColumnSorter column={column}/>
+                    </div>  // </th>
                   );
                 })}
               </div>  // </tr>
