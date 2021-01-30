@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { useTable, useBlockLayout, useSortBy, HeaderPropGetter } from "react-table";
+import { useTable, useBlockLayout, useSortBy } from "react-table";
 import { TableColumnSorter } from "./features/SortByColumn";
 
 
