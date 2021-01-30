@@ -90,7 +90,7 @@ export function getTableExpanderCell(row: any) {
       return;
     }
     curr_row.subRows.map((subRow: any, i_subRow: number) => {
-      subRow.is_parent_expanded = curr_row.is_parent_expanded;
+      subRow.is_parent_expanded = curr_row.is_parent_expanded & curr_row.is_expanded;
       setSubRows_is_parent_expanded(subRow);
     });
   }
