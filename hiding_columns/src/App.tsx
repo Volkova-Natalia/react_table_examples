@@ -33,11 +33,13 @@ function App() {
       {
         id: "first_name",
         Header: "First Name",
+        is_hidden: true,
         accessor: (row: RowInterface) => row.first_name,
       },
       {
         id: "last_name",
         Header: "Last Name",
+        is_hidden: true,
         accessor: (row: RowInterface) => row.last_name,
       },
       {

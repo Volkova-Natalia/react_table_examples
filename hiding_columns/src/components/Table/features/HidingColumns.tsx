@@ -14,44 +14,82 @@ const TableHidingColumnsSelectorStyled = styled.div`
   padding: 16px 16px 16px 16px;
 `;
 
-// --------------------------------------------------
+const AllOnStyled = styled.button`
 
+`;
 
-// --------------------------------------------------
+const AllOffStyled = styled.button`
 
-const IndeterminateCheckbox = React.forwardRef(
-  ({ indeterminate, ...rest }: any, ref) => {
-    const defaultRef = React.useRef();
-    const resolvedRef: any = ref || defaultRef;
-
-    React.useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate;
-    }, [resolvedRef, indeterminate]);
-
-    return <input type="checkbox" ref={resolvedRef} {...rest} />;
-  },
-);
+`;
 
 // --------------------------------------------------
 
 
 // --------------------------------------------------
 
-export function TableHidingColumnsSelector(props: { allColumns: any, getToggleHideAllColumnsProps: Function }) {
+function toggle(on_off: "on" | "off", allColumns: any) {
+  let checkboxes = Array.from(document.getElementsByName("table_hiding_column_checkbox"));
+
+  let checked = (on_off === "on") ? true : false;
+  checkboxes.map((checkbox: any, i_checkbox: number) => {
+
+    checkbox.checked = checked;
+    // if (on_off === "on") {
+    //   checkbox.setAttribute("checked", "checked");
+    // }
+    // else {
+    //   checkbox.removeAttribute("checked");
+    // }
+  });
+
+
+  let hidden = (on_off === "off") ? true : false;
+  allColumns.map((column: any, i_column: number) => {
+    if (column.is_hidden) {
+      column.toggleHidden(hidden);
+    }
+  });
+
+}
+
+function AllOn(props: { allColumns: any }) {
+  return (
+    <AllOnStyled id="AllOn" onClick={() => toggle("on", props.allColumns)}>
+      ON all
+    </AllOnStyled>
+  );
+}
+
+function AllOff(props: { allColumns: any }) {
+  return (
+    <AllOnStyled id="AllOff" onClick={() => toggle("off", props.allColumns)}>
+      OFF all
+    </AllOnStyled>
+  );
+}
+
+// --------------------------------------------------
+
+
+// --------------------------------------------------
+
+export function TableHidingColumnsSelector(props: { allColumns: any }) {
   return (
     <TableHidingColumnsSelectorStyled>
       <div>
-        <IndeterminateCheckbox {...props.getToggleHideAllColumnsProps()} />
-        Toggle All
+        <AllOn allColumns={props.allColumns}/>
+        <AllOff allColumns={props.allColumns}/>
       </div>
       {
         props.allColumns.map((column: any, i_column: number) => (
-          <div key={column.id}>
-            <label>
-              <input type="checkbox" {...column.getToggleHiddenProps()} />{" "}
-              {(column.Header) ? column.Header : column.id}
-            </label>
-          </div>
+          column.is_hidden ? (
+            <div key={column.id}>
+              <label>
+                <input type="checkbox" name="table_hiding_column_checkbox" {...column.getToggleHiddenProps()}/>{" "}
+                {(column.Header) ? column.Header : column.id}
+              </label>
+            </div>
+          ) : null
         ))
       }
     </TableHidingColumnsSelectorStyled>

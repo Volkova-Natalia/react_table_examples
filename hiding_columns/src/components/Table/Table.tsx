@@ -37,10 +37,19 @@ const StyledTable = styled.div`
   }
 
   .table-wrapper .td, .th {
-    padding: 4px 4px 4px 4px;
     text-align: center;  
-    border: 1px solid black;
+    border-style: solid;
+    border-color: black;
     border-spacing: 0;
+${() => {
+  const padding = { top: 4, right: 4, bottom: 4, left: 4 };
+  const border = { top: 1, right: 1, bottom: 1, left: 1 };
+  return (`
+    padding: ${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;
+    border-width: ${border.top}px ${border.right}px ${border.bottom}px ${border.left}px;
+    min-height: ${21 + border.top + padding.top + padding.bottom + border.bottom}px;
+  `);
+}}
   }
 
   .table-wrapper .td div, .th div {  
@@ -52,6 +61,7 @@ const StyledTable = styled.div`
 export interface ColumnInterface {
   id: string,
   Header: string,
+  is_hidden?: boolean,
   accessor: Function,
 }
 
@@ -84,11 +94,11 @@ function ReactTable({ columns, data }: any) {
     useBlockLayout,
   );
 
+
   return (
     <>
       <div>
-        <TableHidingColumnsSelector allColumns={allColumns}
-                                    getToggleHideAllColumnsProps={getToggleHideAllColumnsProps}/>
+        <TableHidingColumnsSelector allColumns={allColumns}/>
 
         <div className="table" {...getTableProps()}>
 
