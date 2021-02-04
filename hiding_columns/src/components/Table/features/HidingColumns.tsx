@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, MutableRefObject } from "react";
 import styled from "styled-components/macro";
 
 
@@ -30,7 +30,8 @@ function getMayHiddenColumns(allColumns: Array<any>) {
 function toggle(column: any, i_column: number, mayHiddenColumns: Array<any>,
                 checked: boolean,
                 checkboxesChecked: Array<boolean>, setCheckboxesChecked: Function,
-                countChecked: number, setCountChecked: Function) {
+                countChecked: number, setCountChecked: Function,
+                selectDeselectAllRef: MutableRefObject<any>) {
   setCheckboxesChecked((prev: Array<boolean>) => {
     let curr = prev.slice();
     curr[i_column] = checked;
@@ -39,13 +40,8 @@ function toggle(column: any, i_column: number, mayHiddenColumns: Array<any>,
   const newCountChecked = (checked) ? (countChecked + 1) : (countChecked - 1);
   setCountChecked(newCountChecked);
 
-  let select_deselect: any = document.getElementById("table_visible_column_select_deselect_all_checkboxes");
-  if ((newCountChecked === 0) ||
-      (newCountChecked === mayHiddenColumns.length)) {
-    select_deselect.indeterminate = false;
-  } else {
-    select_deselect.indeterminate = true;
-  }
+  let selectDeselectAll = selectDeselectAllRef.current;
+  selectDeselectAll.indeterminate = ((newCountChecked === 0) || (newCountChecked === mayHiddenColumns.length)) ? false : true;
 
   column.toggleHidden(!checked);
 }
@@ -69,11 +65,11 @@ function toggleAll(mayHiddenColumns: Array<any>,
 
 // --------------------------------------------------
 
-function SelectDeselectAll(props: { mayHiddenColumns: Array<any>, setCheckboxesChecked: Function, setCountChecked: Function, checked: boolean }) {
+function SelectDeselectAll(props: { selectDeselectAllRef: MutableRefObject<any>, mayHiddenColumns: Array<any>, setCheckboxesChecked: Function, setCountChecked: Function, checked: boolean }) {
   return (
     <label>
-      <input type="checkbox" id="table_visible_column_select_deselect_all_checkboxes" defaultChecked={true}
-             checked={props.checked}
+      <input type="checkbox" ref={props.selectDeselectAllRef}
+             defaultChecked={true} checked={props.checked}
              onChange={(e) =>
                toggleAll(props.mayHiddenColumns,
                  e.target.checked,
@@ -93,9 +89,11 @@ export function TableHidingColumnsSelector(props: { allColumns: Array<any> }) {
   const mayHiddenColumns = getMayHiddenColumns(props.allColumns);
   const [checkboxesChecked, setCheckboxesChecked] = useState(new Array<boolean>(Number(mayHiddenColumns.length)).fill(true));
   const [countChecked, setCountChecked] = useState(Number(mayHiddenColumns.length));
+  const selectDeselectAllRef = useRef(null);
   return (
     <TableHidingColumnsSelectorStyled>
-      <SelectDeselectAll mayHiddenColumns={mayHiddenColumns}
+      <SelectDeselectAll selectDeselectAllRef={selectDeselectAllRef}
+                         mayHiddenColumns={mayHiddenColumns}
                          setCheckboxesChecked={setCheckboxesChecked}
                          setCountChecked={setCountChecked}
                          checked={(countChecked === mayHiddenColumns.length) ? true : false}/>
@@ -103,13 +101,14 @@ export function TableHidingColumnsSelector(props: { allColumns: Array<any> }) {
         mayHiddenColumns.map((column: any, i_column: number) => (
           <div key={column.id} style={{ "marginLeft": "16px" }}>
             <label>
-              <input type="checkbox" defaultChecked={true}
-                     checked={checkboxesChecked[i_column]}
+              <input type="checkbox"
+                     defaultChecked={true} checked={checkboxesChecked[i_column]}
                      onChange={(e) =>
                        toggle(column, i_column, mayHiddenColumns,
                          e.target.checked,
                          checkboxesChecked, setCheckboxesChecked,
-                         countChecked, setCountChecked)
+                         countChecked, setCountChecked,
+                         selectDeselectAllRef)
                      }/>{" "}
               {(column.Header) ? column.Header : column.id}
             </label>
