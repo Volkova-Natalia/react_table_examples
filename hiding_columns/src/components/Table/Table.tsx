@@ -82,7 +82,6 @@ function ReactTable({ columns, data }: any) {
     rows,
     prepareRow,
     allColumns,
-    getToggleHideAllColumnsProps,
 
     state,
   }: any = useTable(
