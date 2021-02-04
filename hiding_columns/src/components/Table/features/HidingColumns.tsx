@@ -27,32 +27,37 @@ function getMayHiddenColumns(allColumns: Array<any>) {
 }
 
 
-function toggle(column: any, mayHiddenColumns: Array<any>, checked: boolean, countChecked: number, setStateCountChecked: Function) {
+function toggle(column: any, i_column: number, mayHiddenColumns: Array<any>,
+                checked: boolean,
+                checkboxesChecked: Array<boolean>, setCheckboxesChecked: Function,
+                countChecked: number, setCountChecked: Function) {
+  setCheckboxesChecked((prev: Array<boolean>) => {
+    let curr = prev.slice();
+    curr[i_column] = checked;
+    return curr;
+  });
   const newCountChecked = (checked) ? (countChecked + 1) : (countChecked - 1);
-  setStateCountChecked(newCountChecked);
+  setCountChecked(newCountChecked);
 
   let select_deselect: any = document.getElementById("table_visible_column_select_deselect_all_checkboxes");
-  if (newCountChecked === 0) {
-    select_deselect.checked = false;
-    select_deselect.indeterminate = false;
-  } else if (newCountChecked === mayHiddenColumns.length) {
-    select_deselect.checked = true;
+  if ((newCountChecked === 0) ||
+      (newCountChecked === mayHiddenColumns.length)) {
     select_deselect.indeterminate = false;
   } else {
-    select_deselect.checked = false;
     select_deselect.indeterminate = true;
   }
 
   column.toggleHidden(!checked);
 }
 
-function toggleAll(checked: boolean, mayHiddenColumns: Array<any>, setStateCountChecked: Function) {
-  let checkboxes = Array.from(document.getElementsByName("table_visible_column_checkbox"));
-  checkboxes.map((checkbox: any, i_checkbox: number) => {
-    checkbox.checked = checked;
-  });
-
-  setStateCountChecked(() => checked ? mayHiddenColumns.length : 0);
+function toggleAll(mayHiddenColumns: Array<any>,
+                   checked: boolean,
+                   setCheckboxesChecked: Function, setCountChecked: Function) {
+  setCheckboxesChecked(() => (
+    checked ? (
+      new Array<boolean>(Number(mayHiddenColumns.length)).fill(true)) : (
+      new Array<boolean>(Number(mayHiddenColumns.length)).fill(false))));
+  setCountChecked(() => checked ? mayHiddenColumns.length : 0);
 
   mayHiddenColumns.map((column: any, i_column: number) => {
     column.toggleHidden(!checked);
@@ -64,12 +69,15 @@ function toggleAll(checked: boolean, mayHiddenColumns: Array<any>, setStateCount
 
 // --------------------------------------------------
 
-function SelectDeselectAll(props: { mayHiddenColumns: Array<any>, setStateCountChecked: Function }) {
+function SelectDeselectAll(props: { mayHiddenColumns: Array<any>, setCheckboxesChecked: Function, setCountChecked: Function, checked: boolean }) {
   return (
     <label>
       <input type="checkbox" id="table_visible_column_select_deselect_all_checkboxes" defaultChecked={true}
+             checked={props.checked}
              onChange={(e) =>
-               toggleAll(e.target.checked, props.mayHiddenColumns, props.setStateCountChecked)
+               toggleAll(props.mayHiddenColumns,
+                 e.target.checked,
+                 props.setCheckboxesChecked, props.setCountChecked)
              }/>{" "}
       Select / Deselect all
     </label>
@@ -83,17 +91,25 @@ function SelectDeselectAll(props: { mayHiddenColumns: Array<any>, setStateCountC
 
 export function TableHidingColumnsSelector(props: { allColumns: Array<any> }) {
   const mayHiddenColumns = getMayHiddenColumns(props.allColumns);
+  const [checkboxesChecked, setCheckboxesChecked] = useState(new Array<boolean>(Number(mayHiddenColumns.length)).fill(true));
   const [countChecked, setCountChecked] = useState(Number(mayHiddenColumns.length));
   return (
     <TableHidingColumnsSelectorStyled>
-      <SelectDeselectAll mayHiddenColumns={mayHiddenColumns} setStateCountChecked={setCountChecked}/>
+      <SelectDeselectAll mayHiddenColumns={mayHiddenColumns}
+                         setCheckboxesChecked={setCheckboxesChecked}
+                         setCountChecked={setCountChecked}
+                         checked={(countChecked === mayHiddenColumns.length) ? true : false}/>
       {
         mayHiddenColumns.map((column: any, i_column: number) => (
           <div key={column.id} style={{ "marginLeft": "16px" }}>
             <label>
-              <input type="checkbox" name="table_visible_column_checkbox" defaultChecked={true}
+              <input type="checkbox" defaultChecked={true}
+                     checked={checkboxesChecked[i_column]}
                      onChange={(e) =>
-                       toggle(column, mayHiddenColumns, e.target.checked, countChecked, setCountChecked)
+                       toggle(column, i_column, mayHiddenColumns,
+                         e.target.checked,
+                         checkboxesChecked, setCheckboxesChecked,
+                         countChecked, setCountChecked)
                      }/>{" "}
               {(column.Header) ? column.Header : column.id}
             </label>
