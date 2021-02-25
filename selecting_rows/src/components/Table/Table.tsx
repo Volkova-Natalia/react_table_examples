@@ -71,6 +71,7 @@ function ReactTable({ columns, data }: any) {
     headerGroups,
     rows,
     prepareRow,
+    selectedFlatRows, // using: selectedFlatRows.map(record => record.original)
 
     state,
   }: any = useTable(
