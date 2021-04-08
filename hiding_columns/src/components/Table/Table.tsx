@@ -23,6 +23,10 @@ const StyledTable = styled.div`
     background: CadetBlue;
     overflow: scroll;
     flex-grow: 1;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    padding: 16px 16px 16px 16px;
   }
 
   .table-wrapper .table {
