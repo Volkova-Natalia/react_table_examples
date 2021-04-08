@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useSortBy } from "react-table";
 import { TableColumnSorter } from "./features/SortByColumn";
 import { sortHeaderPropGetter } from "./features/SortByColumn";
+import { TABLE, THEAD, TBODY, TR, TD, TH } from "./Components";
 
 
 const StyledTable = styled.div`
@@ -88,47 +89,44 @@ function ReactTable({ columns, data }: any) {
   return (
     <>
       <div>
-        <div className="table" {...getTableProps()}>
+        <TABLE {...getTableProps()}>
 
           {/* ----- Header ----- */}
-          <div className="thead">
+          <THEAD>
             {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <div className="tr" {...headerGroup.getHeaderGroupProps()}>
+              <TR {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column: any, i_column: number) => {
                   return (
-                    <div className="th" {...column.getHeaderProps(sortHeaderPropGetter(column))}>
+                    <TH {...column.getHeaderProps(sortHeaderPropGetter(column))}>
                       {column.render("Header")}
                       {/* Add a sort direction indicator */}
                       <TableColumnSorter column={column}/>
-                    </div>  // </th>
+                    </TH>
                   );
                 })}
-              </div>  // </tr>
+              </TR>
             ))}
-          </div>
-          {/* thead */}
+          </THEAD>
 
           {/* ----- Body ----- */}
-          <div className="tbody" {...getTableBodyProps()}>
+          <TBODY {...getTableBodyProps()}>
             {rows.map((row: any, i_row: number) => {
               prepareRow(row);
               return (
-                <div className="tr" {...row.getRowProps()}>
+                <TR {...row.getRowProps()}>
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
-                      <div className="td" {...cell.getCellProps()}>
+                      <TD {...cell.getCellProps()}>
                         {cell.render("Cell")}
-                      </div>  // td
+                      </TD>
                     );
                   })}
-                </div>  // tr
+                </TR>
               );
             })}
-          </div>
-          {/* tbody */}
+          </TBODY>
 
-        </div>
-        {/* table */}
+        </TABLE>
       </div>
     </>
   );
