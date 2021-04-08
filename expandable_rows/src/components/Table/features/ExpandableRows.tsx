@@ -88,7 +88,9 @@ export function getTableExpanderCell(row: any) {
           })}
         >
         {/*{row.isExpanded ? "👇" : "👉"}*/}
-          {row.isExpanded ? "👇🏻" : "👉🏻"}
+        {/*  {row.isExpanded ? "👇🏻" : "👉🏻"}*/}
+          {/*{row.isExpanded ? <>&#9759;</> : <>&#9758;</>}*/}
+          {row.isExpanded ? <>&#128071;&#127995;</> : <>&#128073;&#127995;</>}
           {/*{row.isExpanded ? "↓" : "→"}*/}
           {/*{row.isExpanded ? "➘" : "➙"}*/}
           {/*{row.isExpanded ? "➘" : "➙"}*/}
