@@ -4,6 +4,7 @@ import { useTable, useBlockLayout, useColumnOrder } from "react-table";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { onTableDragStart, onTableDragUpdate, onTableDragEnd } from "./features/DraggableColumns";
 import { TableDraggableRow, TableDraggableCell } from "./features/DraggableColumns";
+import { TABLE, THEAD, TBODY, TR, TD, TH } from "./Components";
 
 
 const StyledTable = styled.div`
@@ -93,10 +94,10 @@ function ReactTable({ columns, data }: any) {
   return (
     <>
       <div>
-        <div className="table" {...getTableProps()}>
+        <TABLE {...getTableProps()}>
 
           {/* ----- Header ----- */}
-          <div className="thead">
+          <THEAD>
             {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
               <DragDropContext
                 onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
@@ -105,49 +106,46 @@ function ReactTable({ columns, data }: any) {
               >
                 <Droppable droppableId="droppable" direction="horizontal">
                   {(droppableProvided, snapshot) => (
-                    <div className="tr" {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
+                    <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
                       {headerGroup.headers.map((column: any, i_column: number) => (
                         <TableDraggableRow column={column} i_column={i_column}>
                           {(provided: any, snapshot: any) => {
                             return (
-                              <div className="th" {...column.getHeaderProps()}>
+                              <TH {...column.getHeaderProps()}>
                                 <TableDraggableCell provided={provided} snapshot={snapshot}>
                                   {column.render("Header")}
                                 </TableDraggableCell>
-                              </div>  // </th>
+                              </TH>
                             );
                           }}
                         </TableDraggableRow>
                       ))}
-                    </div>  // </tr>
+                    </TR>
                   )}
                 </Droppable>
               </DragDropContext>
             ))}
-          </div>
-          {/* thead */}
+          </THEAD>
 
           {/* ----- Body ----- */}
-          <div className="tbody" {...getTableBodyProps()}>
+          <TBODY {...getTableBodyProps()}>
             {rows.map((row: any, i_row: number) => {
               prepareRow(row);
               return (
-                <div className="tr" {...row.getRowProps()}>
+                <TR {...row.getRowProps()}>
                   {row.cells.map((cell: any, i_cell: number) => {
                     return (
-                      <div className="td" {...cell.getCellProps()}>
+                      <TD {...cell.getCellProps()}>
                         {cell.render("Cell")}
-                      </div>  // td
+                      </TD>
                     );
                   })}
-                </div>  // tr
+                </TR>
               );
             })}
-          </div>
-          {/* tbody */}
+          </TBODY>
 
-        </div>
-        {/* table */}
+        </TABLE>
       </div>
     </>
   );
