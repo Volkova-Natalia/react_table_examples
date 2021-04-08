@@ -1,11 +1,12 @@
 import React from "react";
-import { css } from "styled-components/macro";
+import styled from "styled-components/macro";
+import { TR } from "../Components";
 
 
 // --------------------------------------------------
 
-export const StyledTableDetailRows = css`
-  .detailedRow {
+const StyledTableDetailRows = styled.div`
+  & {
     width: 100%;
     padding: 4px 4px 4px 4px;
     text-align: center;
@@ -73,7 +74,7 @@ export function getTableDetailerCell(row: any) {
 export function TableDetail(props: { row: any, detail: any }) {
   return (
     props.row.is_detail ? (
-      <div className="tr" {...props.row.getRowProps()}>
+      <TR {...props.row.getRowProps()}>
         {/*
             Inside it, call our renderRowSubComponent function. In reality,
             you could pass whatever you want as props to
@@ -81,10 +82,10 @@ export function TableDetail(props: { row: any, detail: any }) {
             table instance. But for this example, we'll just
             pass the row
         */}
-        <div className="detailedRow">
+        <StyledTableDetailRows>
           {props.detail(props.row)}
-        </div>
-      </div>  // tr
+        </StyledTableDetailRows>
+      </TR>
     ) : null
   );
 }
