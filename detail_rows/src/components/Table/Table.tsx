@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components/macro";
 import { useTable, useBlockLayout, useExpanded } from "react-table";
-import { StyledTableDetailRows } from "./features/DetailRows";
 import { TableDetail } from "./features/DetailRows";
+import { TABLE, THEAD, TBODY, TR, TD, TH } from "./Components";
 
 
 const StyledTable = styled.div`
@@ -18,9 +18,6 @@ const StyledTable = styled.div`
   
   
 /* Features */
-
-/* Detail rows */
-  .table-wrapper ${StyledTableDetailRows}
 
 
 /* A bit more styling to make it look better */
@@ -94,49 +91,45 @@ function ReactTable({ columns, data, detail }: any) {
   return (
     <>
       <div>
-        <div className="table" {...getTableProps()}>
+        <TABLE {...getTableProps()}>
 
           {/* ----- Header ----- */}
-          <div className="thead">
+          <THEAD>
             {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <div className="tr" {...headerGroup.getHeaderGroupProps()}>
+              <TR {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column: any, i_column: number) => {
                   return (
-                    <div className="th" {...column.getHeaderProps()}>
+                    <TH {...column.getHeaderProps()}>
                       {column.render("Header")}
-                    </div>  // </th>
+                    </TH>
                   );
                 })}
-              </div>  // </tr>
+              </TR>
             ))}
-          </div>
-          {/* thead */}
+          </THEAD>
 
           {/* ----- Body ----- */}
-          <div className="tbody" {...getTableBodyProps()}>
+          <TBODY {...getTableBodyProps()}>
             {rows.map((row: any, i_row: number) => {
               prepareRow(row);
               return (
                 <div>
-                  <div className="tr" {...row.getRowProps()}>
+                  <TR {...row.getRowProps()}>
                     {row.cells.map((cell: any, i_cell: number) => {
                       return (
-                        <div className="td" {...cell.getCellProps()}>
+                        <TD {...cell.getCellProps()}>
                           {cell.render("Cell")}
-                        </div>  // td
+                        </TD>
                       );
                     })}
-                  </div>
-                  {/*tr*/}
+                  </TR>
                   <TableDetail row={row} detail={detail}/>
                 </div>
               );
             })}
-          </div>
-          {/* tbody */}
+          </TBODY>
 
-        </div>
-        {/* table */}
+        </TABLE>
       </div>
     </>
   );
