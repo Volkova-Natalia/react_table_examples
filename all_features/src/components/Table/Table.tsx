@@ -38,13 +38,13 @@ import { TableColumnResizer } from "./features/ResizableColumns";
 import { onTableDragStart, onTableDragUpdate, onTableDragEnd } from "./features/DraggableColumns";
 import { TableDraggableRow, TableDraggableCell } from "./features/DraggableColumns";
 import { StyledTableExpandableRows, getTableExpandableRowsStyle } from "./features/ExpandableRows";
-import { StyledTableDetailRows } from "./features/DetailRows";
 import { TableDetail } from "./features/DetailRows";
 import { isVisibleRow } from "./features/ExpandableRows";
 import { setStateExpandedDetailRowsId } from "./features/ExpandableDetailRows";
 import { TableColumnSorter } from "./features/SortByColumn";
 import { sortHeaderPropGetter } from "./features/SortByColumn";
 import { TableHidingColumnsSelector } from "./features/HidingColumns";
+import { TABLE, THEAD, TBODY, TR, TD, TH } from "./Components";
 
 
 const StyledTable = styled.div`
@@ -69,7 +69,7 @@ const StyledTable = styled.div`
 /* Fixed header */
   ${StyledTableFixedHeader}
 
-/* Fixed header */
+/* Fixed footer */
   ${StyledTableFixedFooter}
   
 /* Fixed columns */
@@ -80,9 +80,6 @@ const StyledTable = styled.div`
 
 /* Expandable rows */
   .table-wrapper ${StyledTableExpandableRows}
-
-/* Detail rows */
-  .table-wrapper ${StyledTableDetailRows}
 
 /* A bit more styling to make it look better */
 
@@ -188,10 +185,10 @@ function ReactTable({ columns, data, detail }: any) {
       <div>
         <TableHidingColumnsSelector allColumns={allColumns}/>
 
-        <div className="table" {...getTableProps()}>
+        <TABLE {...getTableProps()}>
 
           {/* ----- Header ----- */}
-          <div className="thead">
+          <THEAD>
             {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
               <DragDropContext
                 onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
@@ -200,37 +197,36 @@ function ReactTable({ columns, data, detail }: any) {
               >
                 <Droppable droppableId="droppable" direction="horizontal">
                   {(droppableProvided, snapshot) => (
-                    <div className="tr" {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
+                    <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
                       {headerGroup.headers.map((column: any, i_column: number) => (
                         <TableDraggableRow column={column} i_column={i_column}>
                           {(provided: any, snapshot: any) => {
                             return (
-                              <div className="th" {...column.getHeaderProps(sortHeaderPropGetter(column))}
-                                   style={{
-                                     ...column.getHeaderProps().style,
-                                     ...getTableFixedColumnStyle(column),
-                                   }}>
+                              <TH {...column.getHeaderProps(sortHeaderPropGetter(column))}
+                                  style={{
+                                    ...column.getHeaderProps().style,
+                                    ...getTableFixedColumnStyle(column),
+                                  }}>
                                 <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
                                   {column.render("Header")}
                                   {/* Add a sort direction indicator */}
                                   <TableColumnSorter column={column}/>
                                 </TableDraggableCell>
                                 <TableColumnResizer column={column}/>
-                              </div>  // </th>
+                              </TH>
                             );
                           }}
                         </TableDraggableRow>
                       ))}
-                    </div>  // </tr>
+                    </TR>
                   )}
                 </Droppable>
               </DragDropContext>
             ))}
-          </div>
-          {/* thead */}
+          </THEAD>
 
           {/* ----- Body ----- */}
-          <div className="tbody" {...getTableBodyProps()}>
+          <TBODY {...getTableBodyProps()}>
             {rows.map((row: any, i_row: number) => {
               prepareRow(row);
               const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
@@ -238,31 +234,28 @@ function ReactTable({ columns, data, detail }: any) {
               return (
                 isVisibleRow(row) ? (
                   <div>
-                    <div className="tr" {...row.getRowProps()}>
+                    <TR {...row.getRowProps()}>
                       {row.cells.map((cell: any, i_cell: number) => {
                         return (
-                          <div className={"td " + isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
-                               style={{
-                                 ...cell.getCellProps().style,
-                                 ...getTableFixedColumnStyle(cell.column),
-                                 ...getTableExpandableRowsStyle(row.depth, cell.column.id),
-                               }}>
+                          <TD className={isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
+                              style={{
+                                ...cell.getCellProps().style,
+                                ...getTableFixedColumnStyle(cell.column),
+                                ...getTableExpandableRowsStyle(row.depth, cell.column.id),
+                              }}>
                             {cell.render("Cell")}
-                          </div>  // td
+                          </TD>
                         );
                       })}
-                    </div>
-                    {/*tr*/}
+                    </TR>
                     <TableDetail row={row} detail={detail}/>
                   </div>
                 ) : null
               );
             })}
-          </div>
-          {/* tbody */}
+          </TBODY>
 
-        </div>
-        {/* table */}
+        </TABLE>
       </div>
     </>
   );
