@@ -12,7 +12,7 @@ const Styled = styled.div`
   border-style: solid;
   border-color: black;
   width: 960px;
-  height: 960px;
+  height: 760px;
   border-width: 2px 2px 2px 2px;
   margin: 32px 32px 32px 32px;
   padding: 16px 16px 16px 16px;

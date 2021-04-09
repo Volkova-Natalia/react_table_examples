@@ -61,9 +61,11 @@ const StyledTable = styled.div`
   
 /* Features */
 
-  .fixed {
+  .fixed .table {
     overflow: scroll;
+    //overflow: auto;
     flex-grow: 1;
+    height: 80%;
   }
 
 /* Fixed header */
@@ -85,6 +87,10 @@ const StyledTable = styled.div`
 
   .table-wrapper {
     background: CadetBlue;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    padding: 0px 16px 16px 16px;
   }
 
   .table-wrapper .table {
@@ -182,81 +188,79 @@ function ReactTable({ columns, data, detail }: any) {
 
   return (
     <>
-      <div>
-        <TableHidingColumnsSelector allColumns={allColumns}/>
+      <TableHidingColumnsSelector allColumns={allColumns}/>
 
-        <TABLE {...getTableProps()}>
+      <TABLE {...getTableProps()}>
 
-          {/* ----- Header ----- */}
-          <THEAD>
-            {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <DragDropContext
-                onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
-                onDragUpdate={(initial, provided) => onTableDragUpdate(initial, provided, currentColOrder, flatHeaders, setColumnOrder)}
-                onDragEnd={onTableDragEnd}
-              >
-                <Droppable droppableId="droppable" direction="horizontal">
-                  {(droppableProvided, snapshot) => (
-                    <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
-                      {headerGroup.headers.map((column: any, i_column: number) => (
-                        <TableDraggableRow column={column} i_column={i_column}>
-                          {(provided: any, snapshot: any) => {
-                            return (
-                              <TH {...column.getHeaderProps(sortHeaderPropGetter(column))}
-                                  style={{
-                                    ...column.getHeaderProps().style,
-                                    ...getTableFixedColumnStyle(column),
-                                  }}>
-                                <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
-                                  {column.render("Header")}
-                                  {/* Add a sort direction indicator */}
-                                  <TableColumnSorter column={column}/>
-                                </TableDraggableCell>
-                                <TableColumnResizer column={column}/>
-                              </TH>
-                            );
-                          }}
-                        </TableDraggableRow>
-                      ))}
-                    </TR>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            ))}
-          </THEAD>
+        {/* ----- Header ----- */}
+        <THEAD>
+          {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
+            <DragDropContext
+              onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
+              onDragUpdate={(initial, provided) => onTableDragUpdate(initial, provided, currentColOrder, flatHeaders, setColumnOrder)}
+              onDragEnd={onTableDragEnd}
+            >
+              <Droppable droppableId="droppable" direction="horizontal">
+                {(droppableProvided, snapshot) => (
+                  <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
+                    {headerGroup.headers.map((column: any, i_column: number) => (
+                      <TableDraggableRow column={column} i_column={i_column}>
+                        {(provided: any, snapshot: any) => {
+                          return (
+                            <TH {...column.getHeaderProps(sortHeaderPropGetter(column))}
+                                style={{
+                                  ...column.getHeaderProps().style,
+                                  ...getTableFixedColumnStyle(column),
+                                }}>
+                              <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
+                                {column.render("Header")}
+                                {/* Add a sort direction indicator */}
+                                <TableColumnSorter column={column}/>
+                              </TableDraggableCell>
+                              <TableColumnResizer column={column}/>
+                            </TH>
+                          );
+                        }}
+                      </TableDraggableRow>
+                    ))}
+                  </TR>
+                )}
+              </Droppable>
+            </DragDropContext>
+          ))}
+        </THEAD>
 
-          {/* ----- Body ----- */}
-          <TBODY {...getTableBodyProps()}>
-            {rows.map((row: any, i_row: number) => {
-              prepareRow(row);
-              const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
-              setStateExpandedDetailRowsId(row, expandedDetailRowsId, setExpandedDetailRowsId);
-              return (
-                isVisibleRow(row) ? (
-                  <div>
-                    <TR {...row.getRowProps()}>
-                      {row.cells.map((cell: any, i_cell: number) => {
-                        return (
-                          <TD className={isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
-                              style={{
-                                ...cell.getCellProps().style,
-                                ...getTableFixedColumnStyle(cell.column),
-                                ...getTableExpandableRowsStyle(row.depth, cell.column.id),
-                              }}>
-                            {cell.render("Cell")}
-                          </TD>
-                        );
-                      })}
-                    </TR>
-                    <TableDetail row={row} detail={detail}/>
-                  </div>
-                ) : null
-              );
-            })}
-          </TBODY>
+        {/* ----- Body ----- */}
+        <TBODY {...getTableBodyProps()}>
+          {rows.map((row: any, i_row: number) => {
+            prepareRow(row);
+            const isSubRowClassName = (row.depth > 0) ? "subRow" : "";
+            setStateExpandedDetailRowsId(row, expandedDetailRowsId, setExpandedDetailRowsId);
+            return (
+              isVisibleRow(row) ? (
+                <div>
+                  <TR {...row.getRowProps()}>
+                    {row.cells.map((cell: any, i_cell: number) => {
+                      return (
+                        <TD className={isSubRowClassName + " " + cell.column.id} {...cell.getCellProps()}
+                            style={{
+                              ...cell.getCellProps().style,
+                              ...getTableFixedColumnStyle(cell.column),
+                              ...getTableExpandableRowsStyle(row.depth, cell.column.id),
+                            }}>
+                          {cell.render("Cell")}
+                        </TD>
+                      );
+                    })}
+                  </TR>
+                  <TableDetail row={row} detail={detail}/>
+                </div>
+              ) : null
+            );
+          })}
+        </TBODY>
 
-        </TABLE>
-      </div>
+      </TABLE>
     </>
   );
 }

@@ -5,13 +5,42 @@ import styled from "styled-components/macro";
 // --------------------------------------------------
 
 const TableHidingColumnsSelectorStyled = styled.div`
-  background-color: rgba(57, 236, 236, 0.20);
-  border-style: solid;
-  border-color: black;
-  width: 100%;
-  border-width: 2px 2px 2px 2px;
-  margin: 16px 8px 24px 8px;
-  padding: 16px 16px 16px 16px;
+  & {  
+    position: relative;
+    display: inline-block;
+    float: right;
+    
+    :hover {
+      button {
+        color: white;
+      }
+      
+      .content {
+        display: block;
+      }
+    }
+  }
+
+  button {
+    //background-color: #3498DB;
+    background-color: rgba(57, 236, 236, 0);
+    padding: 4px 8px 4px 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5em;
+  }
+
+  .content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f1f1f1;
+    //background-color: #DDD;
+    padding: 8px 8px 8px 8px;
+    min-width: 180px;
+    box-shadow: 0px 16px 16px 0px rgba(0,0,0,0.4);
+    z-index: 2;
+  }
 `;
 
 // --------------------------------------------------
@@ -90,31 +119,40 @@ export function TableHidingColumnsSelector(props: { allColumns: Array<any> }) {
   const [checkboxesChecked, setCheckboxesChecked] = useState(new Array<boolean>(Number(mayHiddenColumns.length)).fill(true));
   const [countChecked, setCountChecked] = useState(Number(mayHiddenColumns.length));
   const selectDeselectAllRef = useRef(null);
+
   return (
     <TableHidingColumnsSelectorStyled>
-      <SelectDeselectAll selectDeselectAllRef={selectDeselectAllRef}
-                         mayHiddenColumns={mayHiddenColumns}
-                         setCheckboxesChecked={setCheckboxesChecked}
-                         setCountChecked={setCountChecked}
-                         checked={(countChecked === mayHiddenColumns.length) ? true : false}/>
-      {
-        mayHiddenColumns.map((column: any, i_column: number) => (
-          <div key={column.id} style={{ "marginLeft": "16px" }}>
-            <label>
-              <input type="checkbox"
-                     defaultChecked={true} checked={checkboxesChecked[i_column]}
-                     onChange={(e) =>
-                       toggle(column, i_column, mayHiddenColumns,
-                         e.target.checked,
-                         checkboxesChecked, setCheckboxesChecked,
-                         countChecked, setCountChecked,
-                         selectDeselectAllRef)
-                     }/>{" "}
-              {(column.Header) ? column.Header : column.id}
-            </label>
-          </div>
-        ))
-      }
+      <button>
+        {/*<>&#9680;</>*/}
+        {/*<>&#10729;</>*/}
+        {/*<>&#9881;</>*/}
+        <>&#128065;</>
+      </button>
+      <div className="content">
+        <SelectDeselectAll selectDeselectAllRef={selectDeselectAllRef}
+                           mayHiddenColumns={mayHiddenColumns}
+                           setCheckboxesChecked={setCheckboxesChecked}
+                           setCountChecked={setCountChecked}
+                           checked={(countChecked === mayHiddenColumns.length) ? true : false}/>
+        {
+          mayHiddenColumns.map((column: any, i_column: number) => (
+            <div key={column.id} style={{ "marginLeft": "16px" }}>
+              <label>
+                <input type="checkbox"
+                       defaultChecked={true} checked={checkboxesChecked[i_column]}
+                       onChange={(e) =>
+                         toggle(column, i_column, mayHiddenColumns,
+                           e.target.checked,
+                           checkboxesChecked, setCheckboxesChecked,
+                           countChecked, setCountChecked,
+                           selectDeselectAllRef)
+                       }/>{" "}
+                {(column.Header) ? column.Header : column.id}
+              </label>
+            </div>
+          ))
+        }
+      </div>
     </TableHidingColumnsSelectorStyled>
   );
 }
