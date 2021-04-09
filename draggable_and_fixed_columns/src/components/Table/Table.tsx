@@ -19,13 +19,22 @@ const StyledTable = styled.div`
     flex-direction: column;
   }
 
+  .table {
+    overflow: scroll;
+    //overflow: auto;
+    flex-grow: 1;
+    //height: 80%;
+  }
+
 
 /* A bit more styling to make it look better */
 
   .table-wrapper {
     background: CadetBlue;
-    overflow: scroll;
-    flex-grow: 1;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    padding: 16px 16px 16px 16px;
   }
 
   .table-wrapper .table {
@@ -95,62 +104,60 @@ function ReactTable({ columns, data }: any) {
 
   return (
     <>
-      <div>
-        <TABLE {...getTableProps()}>
+      <TABLE {...getTableProps()}>
 
-          {/* ----- Header ----- */}
-          <THEAD>
-            {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <DragDropContext
-                onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
-                onDragUpdate={(initial, provided) => onTableDragUpdate(initial, provided, currentColOrder, flatHeaders, setColumnOrder)}
-                onDragEnd={onTableDragEnd}
-              >
-                <Droppable droppableId="droppable" direction="horizontal">
-                  {(droppableProvided, snapshot) => (
-                    <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
-                      {headerGroup.headers.map((column: any, i_column: number) => (
-                        <TableDraggableRow column={column} i_column={i_column}>
-                          {(provided: any, snapshot: any) => {
-                            return (
-                              <TH {...column.getHeaderProps()}
-                                  style={{ ...column.getHeaderProps().style, ...getTableFixedColumnStyle(column) }}>
-                                <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
-                                  {column.render("Header")}
-                                </TableDraggableCell>
-                              </TH>
-                            );
-                          }}
-                        </TableDraggableRow>
-                      ))}
-                    </TR>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            ))}
-          </THEAD>
+        {/* ----- Header ----- */}
+        <THEAD>
+          {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
+            <DragDropContext
+              onDragStart={() => onTableDragStart(currentColOrder, flatHeaders)}
+              onDragUpdate={(initial, provided) => onTableDragUpdate(initial, provided, currentColOrder, flatHeaders, setColumnOrder)}
+              onDragEnd={onTableDragEnd}
+            >
+              <Droppable droppableId="droppable" direction="horizontal">
+                {(droppableProvided, snapshot) => (
+                  <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
+                    {headerGroup.headers.map((column: any, i_column: number) => (
+                      <TableDraggableRow column={column} i_column={i_column}>
+                        {(provided: any, snapshot: any) => {
+                          return (
+                            <TH {...column.getHeaderProps()}
+                                style={{ ...column.getHeaderProps().style, ...getTableFixedColumnStyle(column) }}>
+                              <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
+                                {column.render("Header")}
+                              </TableDraggableCell>
+                            </TH>
+                          );
+                        }}
+                      </TableDraggableRow>
+                    ))}
+                  </TR>
+                )}
+              </Droppable>
+            </DragDropContext>
+          ))}
+        </THEAD>
 
-          {/* ----- Body ----- */}
-          <TBODY {...getTableBodyProps()}>
-            {rows.map((row: any, i_row: number) => {
-              prepareRow(row);
-              return (
-                <TR {...row.getRowProps()}>
-                  {row.cells.map((cell: any, i_cell: number) => {
-                    return (
-                      <TD {...cell.getCellProps()}
-                          style={{ ...cell.getCellProps().style, ...getTableFixedColumnStyle(cell.column) }}>
-                        {cell.render("Cell")}
-                      </TD>
-                    );
-                  })}
-                </TR>
-              );
-            })}
-          </TBODY>
+        {/* ----- Body ----- */}
+        <TBODY {...getTableBodyProps()}>
+          {rows.map((row: any, i_row: number) => {
+            prepareRow(row);
+            return (
+              <TR {...row.getRowProps()}>
+                {row.cells.map((cell: any, i_cell: number) => {
+                  return (
+                    <TD {...cell.getCellProps()}
+                        style={{ ...cell.getCellProps().style, ...getTableFixedColumnStyle(cell.column) }}>
+                      {cell.render("Cell")}
+                    </TD>
+                  );
+                })}
+              </TR>
+            );
+          })}
+        </TBODY>
 
-        </TABLE>
-      </div>
+      </TABLE>
     </>
   );
 }

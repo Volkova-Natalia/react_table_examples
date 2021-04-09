@@ -15,12 +15,14 @@ const StyledTable = styled.div`
     display: flex;
     flex-direction: column;
   }
-  
+
   .table {
     overflow: scroll;
+    //overflow: auto;
     flex-grow: 1;
     //height: 80%;
   }
+
 
 /* A bit more styling to make it look better */
 

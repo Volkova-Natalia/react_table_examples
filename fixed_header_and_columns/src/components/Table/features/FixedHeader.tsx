@@ -5,9 +5,11 @@ import { css } from "styled-components/macro";
 // --------------------------------------------------
 
 export const StyledTableFixedHeader = css`
-  .fixed {
+  .fixed .table {
     overflow-y: scroll;
+    //overflow-y: auto;
     flex-grow: 1;
+    height: 80%;
   }
 
   .fixed-header .thead {

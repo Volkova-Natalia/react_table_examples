@@ -15,17 +15,22 @@ const StyledTable = styled.div`
     display: flex;
     flex-direction: column;
   }
-  
+
 
 /* Features */
 
 /* Fixed header */
   ${StyledTableFixedHeader}
 
+
 /* A bit more styling to make it look better */
 
   .table-wrapper {
     background: CadetBlue;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    padding: 16px 16px 16px 16px;
   }
 
   .table-wrapper .table {
@@ -88,44 +93,42 @@ function ReactTable({ columns, data }: any) {
 
   return (
     <>
-      <div>
-        <TABLE {...getTableProps()}>
+      <TABLE {...getTableProps()}>
 
-          {/* ----- Header ----- */}
-          <THEAD>
-            {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <TR {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column: any, i_column: number) => {
+        {/* ----- Header ----- */}
+        <THEAD>
+          {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
+            <TR {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column: any, i_column: number) => {
+                return (
+                  <TH {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </TH>
+                );
+              })}
+            </TR>
+          ))}
+        </THEAD>
+
+        {/* ----- Body ----- */}
+        <TBODY {...getTableBodyProps()}>
+          {rows.map((row: any, i_row: number) => {
+            prepareRow(row);
+            return (
+              <TR {...row.getRowProps()}>
+                {row.cells.map((cell: any, i_cell: number) => {
                   return (
-                    <TH {...column.getHeaderProps()}>
-                      {column.render("Header")}
-                    </TH>
+                    <TD {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </TD>
                   );
                 })}
               </TR>
-            ))}
-          </THEAD>
+            );
+          })}
+        </TBODY>
 
-          {/* ----- Body ----- */}
-          <TBODY {...getTableBodyProps()}>
-            {rows.map((row: any, i_row: number) => {
-              prepareRow(row);
-              return (
-                <TR {...row.getRowProps()}>
-                  {row.cells.map((cell: any, i_cell: number) => {
-                    return (
-                      <TD {...cell.getCellProps()}>
-                        {cell.render("Cell")}
-                      </TD>
-                    );
-                  })}
-                </TR>
-              );
-            })}
-          </TBODY>
-
-        </TABLE>
-      </div>
+      </TABLE>
     </>
   );
 }

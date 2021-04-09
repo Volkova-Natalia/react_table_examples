@@ -57,8 +57,8 @@ const StyledTable = styled.div`
     display: flex;
     flex-direction: column;
   }
-  
-  
+
+
 /* Features */
 
   .fixed .table {
@@ -82,6 +82,7 @@ const StyledTable = styled.div`
 
 /* Expandable rows */
   .table-wrapper ${StyledTableExpandableRows}
+
 
 /* A bit more styling to make it look better */
 

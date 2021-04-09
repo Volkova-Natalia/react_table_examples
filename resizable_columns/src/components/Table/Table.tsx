@@ -20,15 +20,25 @@ const StyledTable = styled.div`
 
 /* Features */
 
+  .table {
+    overflow: scroll;
+    //overflow: auto;
+    flex-grow: 1;
+    //height: 80%;
+  }
+
 /* Resize columns */
   ${StyledTableResizableColumns}
+
 
 /* A bit more styling to make it look better */
 
   .table-wrapper {
     background: CadetBlue;
-    overflow: scroll;
-    flex-grow: 1;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    padding: 16px 16px 16px 16px;
   }
 
   .table-wrapper .table {
@@ -92,45 +102,43 @@ function ReactTable({ columns, data }: any) {
 
   return (
     <>
-      <div>
-        <TABLE {...getTableProps()}>
+      <TABLE {...getTableProps()}>
 
-          {/* ----- Header ----- */}
-          <THEAD>
-            {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <TR {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column: any, i_column: number) => {
+        {/* ----- Header ----- */}
+        <THEAD>
+          {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
+            <TR {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column: any, i_column: number) => {
+                return (
+                  <TH {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                    <TableColumnResizer column={column}/>
+                  </TH>
+                );
+              })}
+            </TR>
+          ))}
+        </THEAD>
+
+        {/* ----- Body ----- */}
+        <TBODY {...getTableBodyProps()}>
+          {rows.map((row: any, i_row: number) => {
+            prepareRow(row);
+            return (
+              <TR {...row.getRowProps()}>
+                {row.cells.map((cell: any, i_cell: number) => {
                   return (
-                    <TH {...column.getHeaderProps()}>
-                      {column.render("Header")}
-                      <TableColumnResizer column={column}/>
-                    </TH>
+                    <TD {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </TD>
                   );
                 })}
               </TR>
-            ))}
-          </THEAD>
+            );
+          })}
+        </TBODY>
 
-          {/* ----- Body ----- */}
-          <TBODY {...getTableBodyProps()}>
-            {rows.map((row: any, i_row: number) => {
-              prepareRow(row);
-              return (
-                <TR {...row.getRowProps()}>
-                  {row.cells.map((cell: any, i_cell: number) => {
-                    return (
-                      <TD {...cell.getCellProps()}>
-                        {cell.render("Cell")}
-                      </TD>
-                    );
-                  })}
-                </TR>
-              );
-            })}
-          </TBODY>
-
-        </TABLE>
-      </div>
+      </TABLE>
     </>
   );
 }
