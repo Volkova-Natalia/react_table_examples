@@ -208,16 +208,18 @@ function ReactTable({ columns, data, detail }: any) {
                       <TableDraggableRow column={column} i_column={i_column}>
                         {(provided: any, snapshot: any) => {
                           return (
-                            <TH {...column.getHeaderProps(sortHeaderPropGetter(column))}
+                            <TH {...column.getHeaderProps()}
                                 style={{
                                   ...column.getHeaderProps().style,
                                   ...getTableFixedColumnStyle(column),
                                 }}>
-                              <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
-                                {column.render("Header")}
-                                {/* Add a sort direction indicator */}
-                                <TableColumnSorter column={column}/>
-                              </TableDraggableCell>
+                              <div {...sortHeaderPropGetter(column)}>
+                                <TableDraggableCell provided={provided} snapshot={snapshot} column={column}>
+                                  {column.render("Header")}
+                                  {/* Add a sort direction indicator */}
+                                  <TableColumnSorter column={column}/>
+                                </TableDraggableCell>
+                              </div>
                               <TableColumnResizer column={column}/>
                             </TH>
                           );

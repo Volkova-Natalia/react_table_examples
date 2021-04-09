@@ -18,9 +18,12 @@ export function TableColumnSorter(props: { column: any }) {
       <span>
         {props.column.isSorted
           ? props.column.isSortedDesc
-            ? " 🔽"
-            : " 🔼"
-          : ""}
+            // ? " 🔽"
+            ? <> &#9660;</>
+            // : " 🔼"
+            : <> &#9650;</>
+          // : ""}
+          : <> &#11137;</>}
       </span>
     ) : null
   );
