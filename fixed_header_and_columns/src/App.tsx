@@ -121,7 +121,7 @@ function App() {
 
   return (
     <Styled>
-      <Table columns={columns} data={data}/>
+      <Table columns={columns} data={React.useMemo(() => data, [])}/>
     </Styled>
   );
 }

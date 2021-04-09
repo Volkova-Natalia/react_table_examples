@@ -188,7 +188,7 @@ function App() {
 
   return (
     <Styled>
-      <Table columns={columns} data={data} detail={Detail}/>
+      <Table columns={columns} data={React.useMemo(() => data, [])} detail={Detail}/>
     </Styled>
   );
 }
