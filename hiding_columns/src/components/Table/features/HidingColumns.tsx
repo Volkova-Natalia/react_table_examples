@@ -6,8 +6,9 @@ import styled from "styled-components/macro";
 
 const TableHidingColumnsSelectorStyled = styled.div`
   & {  
-    //position: relative;
+    position: relative;
     display: inline-block;
+    float: right;
     
     :hover {
       button {
@@ -31,8 +32,8 @@ const TableHidingColumnsSelectorStyled = styled.div`
   
   .content {
     display: none;
-    //position: absolute;
-    position: fixed;
+    position: absolute;
+    right: 0;
     background-color: #f1f1f1;
     //background-color: #DDD;
     padding: 8px 8px 8px 8px;
@@ -124,7 +125,8 @@ export function TableHidingColumnsSelector(props: { allColumns: Array<any> }) {
       <button>
         {/*<>&#9680;</>*/}
         {/*<>&#10729;</>*/}
-        <>&#9881;</>
+        {/*<>&#9881;</>*/}
+        <>&#128065;</>
       </button>
       <div className="content">
         <SelectDeselectAll selectDeselectAllRef={selectDeselectAllRef}

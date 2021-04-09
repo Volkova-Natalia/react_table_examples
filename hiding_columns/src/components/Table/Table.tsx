@@ -15,14 +15,17 @@ const StyledTable = styled.div`
     display: flex;
     flex-direction: column;
   }
-
+  
+  .table {
+    overflow: scroll;
+    flex-grow: 1;
+    //height: 80%;
+  }
 
 /* A bit more styling to make it look better */
 
   .table-wrapper {
     background: CadetBlue;
-    overflow: scroll;
-    flex-grow: 1;
     border-style: solid;
     border-color: black;
     border-width: 2px;
@@ -46,15 +49,15 @@ const StyledTable = styled.div`
     border-style: solid;
     border-color: black;
     border-spacing: 0;
-${() => {
-  const padding = { top: 4, right: 4, bottom: 4, left: 4 };
-  const border = { top: 1, right: 1, bottom: 1, left: 1 };
-  return (`
-    padding: ${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;
-    border-width: ${border.top}px ${border.right}px ${border.bottom}px ${border.left}px;
-    min-height: ${21 + border.top + padding.top + padding.bottom + border.bottom}px;
-  `);
-}}
+    ${() => {
+      const padding = { top: 4, right: 4, bottom: 4, left: 4 };
+      const border = { top: 1, right: 1, bottom: 1, left: 1 };
+      return (`
+        padding: ${padding.top}px ${padding.right}px ${padding.bottom}px ${padding.left}px;
+        border-width: ${border.top}px ${border.right}px ${border.bottom}px ${border.left}px;
+        min-height: ${21 + border.top + padding.top + padding.bottom + border.bottom}px;
+      `);
+    }}
   }
 
   .table-wrapper .td div, .th div {  
@@ -101,46 +104,44 @@ function ReactTable({ columns, data }: any) {
 
   return (
     <>
-      <div>
-        <TableHidingColumnsSelector allColumns={allColumns}/>
+      <TableHidingColumnsSelector allColumns={allColumns}/>
 
-        <TABLE {...getTableProps()}>
+      <TABLE {...getTableProps()}>
 
-          {/* ----- Header ----- */}
-          <THEAD>
-            {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
-              <TR {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column: any, i_column: number) => {
+        {/* ----- Header ----- */}
+        <THEAD>
+          {headerGroups.map((headerGroup: any, i_headerGroup: number) => (
+            <TR {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column: any, i_column: number) => {
+                return (
+                  <TH {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </TH>
+                );
+              })}
+            </TR>
+          ))}
+        </THEAD>
+
+        {/* ----- Body ----- */}
+        <TBODY {...getTableBodyProps()}>
+          {rows.map((row: any, i_row: number) => {
+            prepareRow(row);
+            return (
+              <TR {...row.getRowProps()}>
+                {row.cells.map((cell: any, i_cell: number) => {
                   return (
-                    <TH {...column.getHeaderProps()}>
-                      {column.render("Header")}
-                    </TH>
+                    <TD {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </TD>
                   );
                 })}
               </TR>
-            ))}
-          </THEAD>
+            );
+          })}
+        </TBODY>
 
-          {/* ----- Body ----- */}
-          <TBODY {...getTableBodyProps()}>
-            {rows.map((row: any, i_row: number) => {
-              prepareRow(row);
-              return (
-                <TR {...row.getRowProps()}>
-                  {row.cells.map((cell: any, i_cell: number) => {
-                    return (
-                      <TD {...cell.getCellProps()}>
-                        {cell.render("Cell")}
-                      </TD>
-                    );
-                  })}
-                </TR>
-              );
-            })}
-          </TBODY>
-
-        </TABLE>
-      </div>
+      </TABLE>
     </>
   );
 }
