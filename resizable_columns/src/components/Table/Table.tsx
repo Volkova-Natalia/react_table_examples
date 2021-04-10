@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { useTable, useBlockLayout, useResizeColumns } from "react-table";
+import { useTable, useFlexLayout, useResizeColumns } from "react-table";
 import { StyledTableResizableColumns } from "./features/ResizableColumns";
 import { TableColumnResizer } from "./features/ResizableColumns";
 import { TABLE, THEAD, TBODY, TR, TD, TH } from "./Components";
@@ -96,7 +96,7 @@ function ReactTable({ columns, data }: any) {
       data,
       defaultColumn,
     },
-    useBlockLayout,
+    useFlexLayout,
     useResizeColumns,
   );
 

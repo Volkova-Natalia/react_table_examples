@@ -8,7 +8,7 @@ const Styled = styled.div`
   background-color: rgba(57, 85, 236, 0.50);
   border-style: solid;
   border-color: black;
-  width: 560px;
+  width: 860px;
   height: 560px;
   border-width: 2px 2px 2px 2px;
   margin: 32px 32px 32px 32px;
