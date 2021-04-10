@@ -22,7 +22,7 @@ import React, { useState } from "react";
 import styled from "styled-components/macro";
 import {
   useTable,
-  useBlockLayout,
+  useFlexLayout,
   useResizeColumns,
   useColumnOrder,
   useExpanded,
@@ -166,7 +166,7 @@ function ReactTable({ columns, data, detail }: any) {
       data,
       defaultColumn,
     },
-    useBlockLayout,
+    useFlexLayout,
     useResizeColumns,
     useColumnOrder,
     useSortBy,
@@ -220,7 +220,7 @@ function ReactTable({ columns, data, detail }: any) {
                                   <TableColumnSorter column={column}/>
                                 </TableDraggableCell>
                               </div>
-                              <TableColumnResizer column={column}/>
+                              {i_column !== columns.length-1 ? <TableColumnResizer column={column}/> : null}
                             </TH>
                           );
                         }}

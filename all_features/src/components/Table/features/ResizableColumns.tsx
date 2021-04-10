@@ -29,9 +29,14 @@ export const StyledTableResizableColumns = css`
     }
   }
   
-  .resize-columns .td, .th, .td div, .th div {
+  .resize-columns .td, .resize-columns .th {
     overflow: hidden;
     text-overflow: ellipsis;
+    
+    flex-grow: 0 !important;
+    :last-child {
+      flex-grow: 1 !important;
+     }
   }
 `;
 
