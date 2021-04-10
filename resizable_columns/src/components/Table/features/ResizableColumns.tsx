@@ -26,10 +26,12 @@ export const StyledTableResizableColumns = css`
     }
   }
   
-  .resize-columns .td, .resize-columns .th {
+  .resize-columns .td, .resize-columns .th, .resize-columns .td div, .resize-columns .th div {
     overflow: hidden;
     text-overflow: ellipsis;
-    
+  }
+  
+  .resize-columns .td, .resize-columns .th {    
     flex-grow: 0 !important;
     :last-child {
       flex-grow: 1 !important;
