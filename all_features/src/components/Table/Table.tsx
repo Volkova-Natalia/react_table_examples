@@ -157,6 +157,7 @@ function ReactTable({ columns, data, detail }: any) {
     flatHeaders,
     setColumnOrder,
     allColumns,
+    totalColumnsWidth,
     selectedFlatRows, // using: selectedFlatRows.map(record => record.original)
 
     state,
@@ -203,7 +204,11 @@ function ReactTable({ columns, data, detail }: any) {
             >
               <Droppable droppableId="droppable" direction="horizontal">
                 {(droppableProvided, snapshot) => (
-                  <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}>
+                  <TR {...headerGroup.getHeaderGroupProps()} ref={droppableProvided.innerRef}
+                      style={{
+                        ...headerGroup.getHeaderGroupProps().style,
+                        minWidth: totalColumnsWidth,
+                      }}>
                     {headerGroup.headers.map((column: any, i_column: number) => (
                       <TableDraggableRow column={column} i_column={i_column}>
                         {(provided: any, snapshot: any) => {
